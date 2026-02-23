@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Code2, Database, Brain, Wrench, Cloud, Shield, Zap, Globe, Sparkles } from 'lucide-react'
+import { Code2, Database, Brain, Wrench, Cloud, Shield, Zap, Globe } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTheme } from '@/context/ThemeContext'
 
@@ -30,39 +30,19 @@ const iconMap: Record<string, any> = {
   Globe
 }
 
-const gradientMap: Record<string, string> = {
-  "Programming Languages": "from-blue-500 via-indigo-500 to-purple-500",
-  "Web Development": "from-cyan-500 via-teal-500 to-emerald-500",
-  "AI & Machine Learning": "from-purple-500 via-pink-500 to-rose-500",
-  "Database & Cloud": "from-orange-500 via-amber-500 to-yellow-500",
-  "Tools & DevOps": "from-slate-500 via-gray-500 to-zinc-500"
-}
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15
-    }
-  }
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut"
-    }
-  }
-}
+const currentlyLearning = [
+  { name: "Rust", color: "text-orange-400" },
+  { name: "Go", color: "text-cyan-400" },
+  { name: "Kubernetes", color: "text-blue-400" },
+  { name: "Web3", color: "text-purple-400" },
+  { name: "System Design", color: "text-emerald-400" },
+]
 
 const Skills = () => {
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([])
   const [loading, setLoading] = useState(true)
+  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null)
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -86,14 +66,13 @@ const Skills = () => {
 
   if (loading) {
     return (
-      <section id="skills" className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="animate-pulse">
-            <div className={`h-10 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded w-64 mx-auto mb-4`}></div>
-            <div className={`h-6 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded w-96 mx-auto mb-12`}></div>
-            <div className="space-y-6">
-              {[1, 2, 3].map(i => (
-                <div key={i} className={`h-48 ${isDark ? 'bg-white/5' : 'bg-gray-100'} rounded-2xl`}></div>
+      <section className={`relative py-32 ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`} id="skills">
+        <div className="container mx-auto px-6 sm:px-12 lg:px-20">
+          <div className="max-w-7xl mx-auto animate-pulse">
+            <div className="h-20 bg-white/5 rounded w-80 mb-20" />
+            <div className="space-y-4">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="h-24 bg-white/3 rounded" />
               ))}
             </div>
           </div>
@@ -103,169 +82,166 @@ const Skills = () => {
   }
 
   return (
-    <section id="skills" className="py-24 px-6 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto relative z-10">
+    <section
+      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      id="skills"
+    >
+      {/* Background ambient */}
+      <div className="absolute inset-0 pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h2 className="section-heading mb-4">
-            Technical Skills
-          </h2>
-          <p className="section-subheading">
-            Comprehensive expertise across modern technologies, frameworks, and tools
-          </p>
-        </motion.div>
+          className={`absolute bottom-1/3 left-0 w-[400px] h-[400px] rounded-full blur-[140px] ${isDark ? 'bg-[#c47a4a]/4' : 'bg-[#d4a853]/3'}`}
+          animate={{ x: [0, 20, 0], y: [0, -12, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="space-y-6"
-        >
-          {skillCategories.map((category) => {
-            const IconComponent = iconMap[category.icon] || Code2
-            const gradient = gradientMap[category.title] || "from-blue-500 via-cyan-500 to-teal-500"
+      <div className="container mx-auto px-6 sm:px-12 lg:px-20 relative z-10">
+        <div className="max-w-7xl mx-auto">
 
-            return (
-              <motion.div
-                key={category._id}
-                variants={cardVariants}
-                className="group"
-              >
-                <div className="professional-card rounded-2xl overflow-hidden">
-                  <div className={`h-1 bg-gradient-to-r ${gradient}`} />
+          {/* Editorial Section Header */}
+          <div className="mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-4 mb-6"
+            >
+              <span className="section-label">05 &mdash; technical expertise</span>
+            </motion.div>
 
-                  <div className="p-8">
-                    <div className="flex items-start gap-4 mb-6">
-                      <motion.div
-                        className={`flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <IconComponent className="w-7 h-7 text-white" />
-                      </motion.div>
+            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
+              {"SKILLS".split('').map((letter, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 40, rotateX: -30, filter: 'blur(10px)' }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.1 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(4rem,13vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </div>
+          </div>
 
-                      <div className="flex-1">
-                        <h3 className={`text-xl font-bold transition-colors duration-300 ${isDark
-                            ? 'text-white group-hover:text-blue-400'
-                            : 'text-gray-900 group-hover:text-blue-600'
+          {/* Skill Categories — Editorial Accordion Style */}
+          <div>
+            {skillCategories.map((category, catIndex) => {
+              const IconComponent = iconMap[category.icon] || Code2
+
+              return (
+                <motion.div
+                  key={category._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: catIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  onMouseEnter={() => setHoveredCategory(catIndex)}
+                  onMouseLeave={() => setHoveredCategory(null)}
+                  className={`group relative border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+                >
+                  <div className="py-10 sm:py-12">
+                    {/* Category Header */}
+                    <div className="grid grid-cols-12 gap-6 items-start mb-8">
+                      {/* Number */}
+                      <div className="col-span-1 hidden sm:block">
+                        <span className={`text-sm font-mono transition-colors duration-500 ${hoveredCategory === catIndex
+                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                          : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
+                          }`}>
+                          {String(catIndex + 1).padStart(2, '0')}
+                        </span>
+                      </div>
+
+                      {/* Category Name */}
+                      <div className="col-span-12 sm:col-span-4">
+                        <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${hoveredCategory === catIndex
+                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                          : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
                           }`}>
                           {category.title}
                         </h3>
-                        <p className={isDark ? 'text-slate-400 text-sm mt-1' : 'text-gray-600 text-sm mt-1'}>
+                        <p className={`text-sm font-light mt-1 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
                           {category.description}
                         </p>
                       </div>
 
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold border ${isDark
-                          ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-                          : 'bg-blue-50 text-blue-600 border-blue-200'
-                        }`}>
-                        {category.skills.length} skills
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3">
-                      {category.skills.map((skill) => (
-                        <motion.div
-                          key={skill.name}
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          className="group/skill"
-                        >
-                          <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border transition-all duration-300 cursor-default ${isDark
-                              ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-blue-500/30'
-                              : 'bg-gray-50 hover:bg-blue-50 border-gray-200 hover:border-blue-300'
-                            }`}>
-                            <span className={`w-8 h-8 rounded-lg bg-gradient-to-r ${skill.color} flex items-center justify-center text-white text-sm shadow-sm`}>
-                              {skill.icon}
-                            </span>
-                            <span className={`font-medium transition-colors duration-200 ${isDark
-                                ? 'text-slate-300 group-hover/skill:text-white'
-                                : 'text-gray-700 group-hover/skill:text-blue-700'
-                              }`}>
+                      {/* Skills — displayed as editorial text list */}
+                      <div className="col-span-12 sm:col-span-7">
+                        <div className="flex flex-wrap gap-x-5 gap-y-3">
+                          {category.skills.map((skill) => (
+                            <motion.span
+                              key={skill.name}
+                              onMouseEnter={() => setHoveredSkill(skill.name)}
+                              onMouseLeave={() => setHoveredSkill(null)}
+                              className={`relative text-lg font-medium cursor-default transition-all duration-400 pb-1 ${hoveredSkill === skill.name
+                                ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                                : isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'
+                                }`}
+                              whileHover={{ y: -2 }}
+                            >
                               {skill.name}
-                            </span>
-                          </div>
-                        </motion.div>
-                      ))}
+                              <motion.span
+                                className={`absolute bottom-0 left-0 h-px ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                                initial={{ width: 0 }}
+                                animate={{ width: hoveredSkill === skill.name ? '100%' : 0 }}
+                                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                              />
+                            </motion.span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </motion.div>
 
-        {/* Currently Learning Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-12"
-        >
-          <div className="professional-card rounded-2xl overflow-hidden">
-            <div className="h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500" />
-
-            <div className="p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <motion.div
-                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center shadow-lg"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                >
-                  <Sparkles className="w-7 h-7 text-white" />
-                </motion.div>
-                <div>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    Currently Learning
-                  </h3>
-                  <p className={isDark ? 'text-slate-400 text-sm mt-1' : 'text-gray-600 text-sm mt-1'}>
-                    Always expanding my expertise with cutting-edge technologies
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { name: 'Rust', icon: '🦀' },
-                  { name: 'Go', icon: '🔷' },
-                  { name: 'Kubernetes', icon: '☸️' },
-                  { name: 'GraphQL', icon: '◈' },
-                  { name: 'Web3', icon: '🌐' },
-                  { name: 'Blockchain', icon: '⛓️' },
-                  { name: 'Three.js', icon: '🎮' },
-                  { name: 'WebGL', icon: '🖼️' }
-                ].map((skill, index) => (
+                  {/* Hover line effect */}
                   <motion.div
-                    key={skill.name}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    className="group/skill"
-                  >
-                    <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border transition-all duration-300 cursor-default ${isDark
-                        ? 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/20 hover:border-emerald-500/40'
-                        : 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 hover:border-emerald-300'
-                      }`}>
-                      <span className="text-lg">{skill.icon}</span>
-                      <span className={isDark ? 'font-medium text-emerald-400' : 'font-medium text-emerald-700'}>
-                        {skill.name}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                    className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: hoveredCategory === catIndex ? '100%' : 0 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </motion.div>
+              )
+            })}
+            {/* Final bottom border */}
+            <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
           </div>
-        </motion.div>
+
+          {/* Currently Learning — Editorial Bottom Section */}
+          <motion.div
+            className="mt-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 1 }}
+          >
+            <div className="flex items-center gap-4 mb-10">
+              <span className={`text-[10px] uppercase tracking-[0.4em] font-mono ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                Currently Exploring
+              </span>
+              <div className={`h-px flex-1 ${isDark ? 'bg-[#d4a853]/10' : 'bg-[#c47a4a]/10'}`} />
+            </div>
+
+            <div className="flex flex-wrap gap-x-8 gap-y-4">
+              {currentlyLearning.map((tech, index) => (
+                <motion.span
+                  key={tech.name}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 + index * 0.08 }}
+                  className={`text-2xl sm:text-3xl font-serif italic cursor-default transition-all duration-500 ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
+                  whileHover={{ y: -4, scale: 1.05 }}
+                >
+                  {tech.name}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -1,164 +1,180 @@
 'use client'
 
-import { Heart, ArrowUp, Github, Linkedin, Mail, Instagram } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { Github, Linkedin, Mail, Instagram, ArrowUp } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
 
 const Footer = () => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   const currentYear = new Date().getFullYear()
 
-  const quickLinks = [
+  const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
+    { name: 'Education', href: '#education' },
+    { name: 'Experience', href: '#internships' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Contact', href: '#contact' }
+    { name: 'Certifications', href: '#certifications' },
+    { name: 'Contact', href: '#contact' },
   ]
 
-  const socialLinks = [
-    { icon: Github, href: 'https://github.com/Sagar-Bawankule', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/sagar-bawankule-856a79264/', label: 'LinkedIn' },
-    { icon: Instagram, href: 'https://www.instagram.com/thee_sagar_', label: 'Instagram' },
-    { icon: Mail, href: 'mailto:sagarbawankule334@gmail.com', label: 'Email' }
+  const socials = [
+    { name: 'GitHub', icon: Github, href: 'https://github.com/Sagar-Bawankule' },
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/sagar-bawankule-856a79264/' },
+    { name: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/thee_sagar_?igsh=c3doaXMyczhiMzRr' },
+    { name: 'Email', icon: Mail, href: 'mailto:sagarbawankule334@gmail.com' },
   ]
 
   const handleNavClick = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+    const el = document.querySelector(href)
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
   return (
-    <footer className={`relative overflow-hidden border-t ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
-      {/* Gradient top border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+    <footer className={`relative overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}>
+      {/* Top divider */}
+      <div className={`h-px mx-6 sm:mx-12 lg:mx-20 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
 
-      <div className="container mx-auto px-6 py-16 relative z-10">
-        <div className="grid lg:grid-cols-4 gap-12">
-          {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">S</span>
-              </div>
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Sagar Bawankule
-              </h3>
-            </div>
-            <p className={`text-lg leading-relaxed mb-8 max-w-md ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
-              AI & Software Developer passionate about creating exceptional digital experiences through innovative technology and thoughtful design.
+      <div className="container mx-auto px-6 sm:px-12 lg:px-20 pt-20 pb-12">
+
+        {/* Big editorial wordmark */}
+        <motion.div
+          className="mb-20 overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <h2 className={`font-serif font-black leading-[0.85] tracking-[-0.03em] select-none
+            text-[clamp(3rem,12vw,11rem)]
+            bg-gradient-to-r from-[#d4a853] via-[#f0b429] to-[#c47a4a] bg-clip-text text-transparent`}>
+            Sagar Bawankule
+          </h2>
+          <p className={`mt-4 text-lg font-serif italic ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+            AI &amp; Software Developer
+          </p>
+        </motion.div>
+
+        {/* Main grid — nav links + info + socials */}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-16 py-12 border-y ${isDark ? 'border-white/5' : 'border-black/5'}`}>
+
+          {/* Nav Links */}
+          <motion.div
+            className="lg:col-span-5"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-8 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+              Navigate
             </p>
-
-            {/* Social Links */}
-            <div className="flex gap-3">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 border ${isDark
-                      ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-blue-500/30 text-slate-400 hover:text-blue-400'
-                      : 'bg-gray-50 hover:bg-blue-50 border-gray-200 hover:border-blue-300 text-gray-500 hover:text-blue-600'
-                    }`}
-                  whileHover={{ y: -3, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={social.label}
+            <div className="flex flex-wrap gap-x-8 gap-y-4">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                  className={`relative group text-base font-medium transition-colors duration-300 pb-0.5 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
                 >
-                  <social.icon className="w-5 h-5" />
-                </motion.a>
+                  {link.name}
+                  <span className={`absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-400 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
+                </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Quick Links</h4>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      handleNavClick(link.href)
-                    }}
-                    className={`font-medium flex items-center gap-2 group transition-colors duration-200 ${isDark
-                        ? 'text-slate-400 hover:text-blue-400'
-                        : 'text-gray-600 hover:text-blue-600'
-                      }`}
-                  >
-                    <span className={`w-1.5 h-1.5 rounded-full transition-colors ${isDark
-                        ? 'bg-slate-600 group-hover:bg-blue-400'
-                        : 'bg-gray-300 group-hover:bg-blue-600'
-                      }`} />
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Get In Touch</h4>
-            <div className="space-y-4">
+          {/* Info */}
+          <motion.div
+            className="lg:col-span-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.35 }}
+          >
+            <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-8 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+              Available
+            </p>
+            <div className="space-y-6">
               <div>
-                <p className={`text-sm mb-1 ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>Email</p>
                 <a
                   href="mailto:sagarbawankule334@gmail.com"
-                  className={`text-sm transition-colors ${isDark
-                      ? 'text-slate-300 hover:text-blue-400'
-                      : 'text-gray-700 hover:text-blue-600'
-                    }`}
+                  className={`text-base font-medium transition-colors ${isDark ? 'text-[#a89f94] hover:text-[#d4a853]' : 'text-[#5c5449] hover:text-[#c47a4a]'}`}
                 >
                   sagarbawankule334@gmail.com
                 </a>
               </div>
               <div>
-                <p className={`text-sm mb-1 ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>Location</p>
-                <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Nagpur, India</p>
+                <p className={`text-base ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>Nagpur, India</p>
               </div>
-              <div>
-                <p className={`text-sm mb-1 ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>Status</p>
-                <span className="inline-flex items-center gap-2 text-emerald-500 text-sm">
-                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                  Available for work
-                </span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                <span className="text-emerald-400 text-sm font-mono tracking-wide">Open to work</span>
               </div>
             </div>
-          </div>
+          </motion.div>
+
+          {/* Social links */}
+          <motion.div
+            className="lg:col-span-3"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-8 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+              Connect
+            </p>
+            <div className="space-y-4">
+              {socials.map((social) => (
+                <motion.a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group flex items-center gap-3 text-base font-medium transition-colors duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
+                  whileHover={{ x: 5 }}
+                >
+                  <social.icon className="w-4 h-4 flex-shrink-0" />
+                  <span className="relative pb-0.5">
+                    {social.name}
+                    <span className={`absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-400 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
+                  </span>
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
         </div>
 
-        {/* Bottom Section */}
-        <div className={`border-t mt-16 pt-8 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className={`text-center md:text-left text-sm ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>
-              © {currentYear} Sagar Bawankule. Made with{' '}
-              <Heart className="inline w-4 h-4 text-red-500 mx-1" />
-              using Next.js & Tailwind CSS
-            </p>
+        {/* Bottom bar */}
+        <div className="flex items-center justify-between pt-10">
+          <motion.p
+            className={`text-sm font-light ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6 }}
+          >
+            © {currentYear} <span className={`font-serif italic ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>Sagar Bawankule</span> — All rights reserved.
+          </motion.p>
 
-            <motion.button
-              onClick={scrollToTop}
-              className={`group p-3 rounded-xl transition-all duration-300 border shadow-lg ${isDark
-                  ? 'bg-white/5 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 text-slate-400 hover:text-white border-white/10 hover:border-transparent'
-                  : 'bg-gray-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 text-gray-500 hover:text-white border-gray-200 hover:border-transparent'
-                }`}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
-            </motion.button>
-          </div>
+          <motion.button
+            onClick={scrollToTop}
+            aria-label="Back to top"
+            className={`group flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.7 }}
+            whileHover={{ y: -2 }}
+          >
+            <ArrowUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
+            Back to top
+          </motion.button>
         </div>
       </div>
     </footer>

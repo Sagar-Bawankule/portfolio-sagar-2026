@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ExternalLink, Github, Brain, Leaf, Zap, Monitor, ArrowUpRight, Sparkles } from 'lucide-react'
+import { ExternalLink, Github, Brain, Leaf, Zap, Monitor, ArrowUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useTheme } from '@/context/ThemeContext'
@@ -27,38 +27,10 @@ const iconMap: Record<string, any> = {
   Monitor,
 }
 
-const gradients = [
-  "from-blue-500 via-indigo-500 to-purple-500",
-  "from-cyan-500 via-teal-500 to-emerald-500",
-  "from-purple-500 via-pink-500 to-rose-500",
-  "from-orange-500 via-amber-500 to-yellow-500"
-]
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15
-    }
-  }
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut"
-    }
-  }
-}
-
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -85,14 +57,13 @@ const Projects = () => {
 
   if (loading) {
     return (
-      <section id="projects" className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="animate-pulse">
-            <div className={`h-10 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded w-64 mx-auto mb-4`}></div>
-            <div className={`h-6 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded w-96 mx-auto mb-12`}></div>
+      <section className={`relative py-32 ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`} id="projects">
+        <div className="container mx-auto px-6 sm:px-12 lg:px-20">
+          <div className="max-w-7xl mx-auto animate-pulse">
+            <div className="h-20 bg-white/5 rounded w-96 mb-20" />
             <div className="space-y-6">
               {[1, 2, 3].map(i => (
-                <div key={i} className={`h-80 ${isDark ? 'bg-white/5' : 'bg-gray-100'} rounded-2xl`}></div>
+                <div key={i} className="h-32 bg-white/3 rounded" />
               ))}
             </div>
           </div>
@@ -102,262 +73,235 @@ const Projects = () => {
   }
 
   return (
-    <section id="projects" className="py-24 px-6 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto relative z-10">
+    <section
+      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      id="projects"
+    >
+      {/* Background ambient */}
+      <div className="absolute inset-0 pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h2 className="section-heading mb-4">
-            Featured Projects
-          </h2>
-          <p className="section-subheading">
-            A showcase of my latest work in AI, web development, and software engineering
-          </p>
-        </motion.div>
+          className={`absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full blur-[150px] ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
+          animate={{ x: [0, -20, 0], y: [0, 15, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="space-y-8"
-        >
-          {featuredProjects.map((project, index) => {
-            const IconComponent = project.icon ? (iconMap[project.icon] || ExternalLink) : ExternalLink
-            const gradient = gradients[index % gradients.length]
+      <div className="container mx-auto px-6 sm:px-12 lg:px-20 relative z-10">
+        <div className="max-w-7xl mx-auto">
 
-            return (
-              <motion.div
-                key={project._id}
-                variants={cardVariants}
-                className="group"
-              >
-                <div className="professional-card rounded-2xl overflow-hidden">
-                  <div className={`h-1 bg-gradient-to-r ${gradient}`} />
+          {/* Editorial Section Header */}
+          <div className="mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-4 mb-6"
+            >
+              <span className="section-label">04 &mdash; selected work</span>
+            </motion.div>
 
-                  <div className="grid lg:grid-cols-5 gap-0">
-                    <div className={`lg:col-span-2 relative h-64 lg:h-full min-h-[250px] overflow-hidden ${isDark ? 'bg-gradient-to-br from-slate-800 to-slate-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                      }`}>
-                      {project.image ? (
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
-                        />
-                      ) : (
-                        <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-                          <IconComponent className="w-16 h-16 text-white/80" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
+              {"PROJECTS".split('').map((letter, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 40, rotateX: -30, filter: 'blur(10px)' }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(4rem,13vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </div>
+          </div>
 
-                      <div className="absolute top-4 left-4 flex gap-2">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-xs font-semibold shadow-lg">
-                          <Sparkles className="w-3 h-3" />
-                          Featured
-                        </span>
+          {/* Featured Projects — Editorial Cards */}
+          <div className="space-y-6 mb-24">
+            {featuredProjects.map((project, index) => {
+              const IconComponent = project.icon ? (iconMap[project.icon] || Zap) : Zap
+
+              return (
+                <motion.div
+                  key={project._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className={`group relative border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+                >
+                  <div className="py-10 sm:py-14 grid grid-cols-12 gap-6 lg:gap-10 items-start">
+
+                    {/* Number */}
+                    <div className="col-span-1 hidden sm:block">
+                      <span className={`text-sm font-mono transition-colors duration-500 ${hoveredIndex === index
+                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                        : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
+                        }`}>
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    {/* Title & Description */}
+                    <div className="col-span-12 sm:col-span-5">
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
+                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                          : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
+                          }`}>
+                          {project.title}
+                        </h3>
                         {project.status && (
-                          <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-full text-xs font-semibold shadow-lg">
+                          <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-widest flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
                             {project.status}
                           </span>
                         )}
                       </div>
-                    </div>
-
-                    <div className="lg:col-span-3 p-8 flex flex-col">
-                      <div className="flex items-start gap-4 mb-4">
-                        <motion.div
-                          className={`flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <IconComponent className="w-7 h-7 text-white" />
-                        </motion.div>
-                        <div>
-                          <h3 className={`text-xl font-bold transition-colors duration-300 ${isDark
-                              ? 'text-white group-hover:text-blue-400'
-                              : 'text-gray-900 group-hover:text-blue-600'
-                            }`}>
-                            {project.title}
-                          </h3>
-                        </div>
-                      </div>
-
-                      <p className={`leading-relaxed mb-6 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                      <p className={`text-base font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
                         {project.description}
                       </p>
+                    </div>
 
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.technologies.map((tech) => (
-                          <motion.span
+                    {/* Technologies */}
+                    <div className="col-span-12 sm:col-span-4">
+                      <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                        Stack
+                      </p>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1">
+                        {project.technologies.map((tech, techIndex) => (
+                          <span
                             key={tech}
-                            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 border ${isDark
-                                ? 'bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/10 hover:border-white/20'
-                                : 'bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-700 border-gray-200 hover:border-blue-200'
-                              }`}
-                            whileHover={{ scale: 1.05 }}
+                            className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#f5f0eb]' : 'text-[#5c5449] hover:text-[#1a1612]'}`}
                           >
                             {tech}
-                          </motion.span>
+                          </span>
                         ))}
                       </div>
+                    </div>
 
-                      <div className="flex gap-3 mt-auto">
-                        {project.githubUrl && (
-                          <motion.a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 border group/btn ${isDark
-                                ? 'bg-white/10 hover:bg-white/20 text-white border-white/10 hover:border-white/20'
-                                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-200 hover:border-gray-300'
-                              }`}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <Github className="w-5 h-5" />
-                            View Code
-                            <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                          </motion.a>
-                        )}
-                        {project.liveUrl && (
-                          <motion.a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl group/btn btn-glow"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <ExternalLink className="w-5 h-5" />
-                            Live Demo
-                            <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                          </motion.a>
-                        )}
-                      </div>
+                    {/* Links */}
+                    <div className="col-span-12 sm:col-span-2 flex sm:flex-col sm:items-end gap-4">
+                      {project.githubUrl && (
+                        <motion.a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#d4a853]' : 'text-[#5c5449] hover:text-[#c47a4a]'}`}
+                          whileHover={{ x: 3 }}
+                        >
+                          <span className="relative pb-0.5">
+                            Code
+                            <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#6b6259]/30' : 'bg-[#8a8178]/30'}`} />
+                          </span>
+                          <Github className="w-4 h-4" />
+                        </motion.a>
+                      )}
+                      {project.liveUrl && (
+                        <motion.a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#d4a853]' : 'text-[#1a1612] hover:text-[#c47a4a]'}`}
+                          whileHover={{ x: 3 }}
+                        >
+                          <span className="relative pb-0.5">
+                            Live
+                            <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#d4a853]/40' : 'bg-[#c47a4a]/40'}`} />
+                          </span>
+                          <ArrowUpRight className="w-4 h-4" />
+                        </motion.a>
+                      )}
                     </div>
                   </div>
-                </div>
+
+                  {/* Hover line effect */}
+                  <motion.div
+                    className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: hoveredIndex === index ? '100%' : 0 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </motion.div>
+              )
+            })}
+            {/* Final border */}
+            <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
+          </div>
+
+          {/* Other Projects — Compact Grid */}
+          {otherProjects.length > 0 && (
+            <div>
+              <motion.div
+                className="flex items-center gap-4 mb-12"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+              >
+                <span className={`text-[10px] uppercase tracking-[0.4em] font-mono ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                  More Projects
+                </span>
+                <div className={`h-px flex-1 ${isDark ? 'bg-[#d4a853]/10' : 'bg-[#c47a4a]/10'}`} />
               </motion.div>
-            )
-          })}
-        </motion.div>
 
-        {otherProjects.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mt-16"
-          >
-            <h3 className={`text-2xl font-bold mb-8 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              More Projects
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {otherProjects.map((project, index) => {
-                const gradient = gradients[(index + featuredProjects.length) % gradients.length]
-                return (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {otherProjects.map((project, index) => (
                   <motion.div
                     key={project._id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -4 }}
-                    className="group"
+                    transition={{ duration: 0.6, delay: index * 0.08 }}
+                    className={`group relative p-6 rounded-xl border transition-all duration-500 ${isDark
+                      ? 'border-white/5 hover:border-[#d4a853]/20 bg-white/[0.01] hover:bg-white/[0.02]'
+                      : 'border-black/5 hover:border-[#c47a4a]/20 bg-black/[0.01] hover:bg-black/[0.02]'
+                      }`}
                   >
-                    <div className="professional-card rounded-2xl overflow-hidden h-full flex flex-col">
-                      <div className={`h-1 bg-gradient-to-r ${gradient}`} />
-
-                      <div className="p-6 flex flex-col h-full">
-                        <h4 className={`text-lg font-bold mb-2 transition-colors duration-300 ${isDark
-                            ? 'text-white group-hover:text-blue-400'
-                            : 'text-gray-900 group-hover:text-blue-600'
-                          }`}>
-                          {project.title}
-                        </h4>
-
-                        <p className={`text-sm mb-4 line-clamp-2 flex-grow ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
-                          {project.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {project.technologies.slice(0, 4).map((tech) => (
-                            <span
-                              key={tech}
-                              className={`px-2.5 py-1 text-xs rounded-lg font-medium border ${isDark
-                                  ? 'bg-white/5 text-slate-400 border-white/10'
-                                  : 'bg-gray-50 text-gray-600 border-gray-200'
-                                }`}
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div className="flex gap-2 mt-auto">
-                          {project.githubUrl && (
-                            <a
-                              href={project.githubUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={`inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-xl font-medium transition-colors flex-1 justify-center border ${isDark
-                                  ? 'bg-white/10 hover:bg-white/20 text-white border-white/10'
-                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-200'
-                                }`}
-                            >
-                              <Github className="w-4 h-4" />
-                              Code
-                            </a>
-                          )}
-                          {project.liveUrl && (
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm rounded-xl font-medium transition-colors flex-1 justify-center"
-                            >
-                              <ExternalLink className="w-4 h-4" />
-                              Demo
-                            </a>
-                          )}
-                        </div>
-                      </div>
+                    <h4 className={`text-lg font-bold tracking-tight mb-2 transition-colors duration-300 ${isDark
+                      ? 'text-[#f5f0eb] group-hover:text-[#d4a853]'
+                      : 'text-[#1a1612] group-hover:text-[#c47a4a]'
+                      }`}>
+                      {project.title}
+                    </h4>
+                    <p className={`text-sm font-light leading-relaxed mb-4 line-clamp-2 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.slice(0, 3).map(tech => (
+                        <span key={tech} className={`text-xs ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 3 && (
+                        <span className={`text-xs ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                          +{project.technologies.length - 3}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-4">
+                      {project.githubUrl && (
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}>
+                          <Github className="w-4 h-4" />
+                        </a>
+                      )}
+                      {project.liveUrl && (
+                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}>
+                          <ArrowUpRight className="w-4 h-4" />
+                        </a>
+                      )}
                     </div>
                   </motion.div>
-                )
-              })}
+                ))}
+              </div>
             </div>
-          </motion.div>
-        )}
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-12"
-        >
-          <motion.a
-            href="https://github.com/Sagar-Bawankule"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group/btn btn-glow btn-shine"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Github className="w-5 h-5" />
-            View All Projects on GitHub
-            <ArrowUpRight className="w-5 h-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-          </motion.a>
-        </motion.div>
+          )}
+        </div>
       </div>
     </section>
   )
