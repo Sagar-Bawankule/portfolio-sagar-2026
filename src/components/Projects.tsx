@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ExternalLink, Github, Brain, Leaf, Zap, Monitor, ArrowUpRight } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import { useTheme } from '@/context/ThemeContext'
 
@@ -33,6 +33,7 @@ const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
+  const rowRef = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -125,13 +126,15 @@ const Projects = () => {
               return (
                 <motion.div
                   key={project._id}
+                  ref={el => { rowRef.current[index] = el }}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className={`group relative border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+                  data-cursor="view"
+                  className={`group relative overflow-hidden border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
                 >
                   <div className="py-10 sm:py-14 grid grid-cols-12 gap-6 lg:gap-10 items-start">
 
@@ -217,6 +220,33 @@ const Projects = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* Hover image reveal — slides in from right */}
+                  {project.image && (
+                    <motion.div
+                      className="absolute top-0 right-0 h-full w-48 sm:w-64 pointer-events-none z-10"
+                      initial={{ x: '100%', opacity: 0 }}
+                      animate={{
+                        x: hoveredIndex === index ? '0%' : '100%',
+                        opacity: hoveredIndex === index ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <div className="relative h-full w-full">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="object-cover"
+                          sizes="256px"
+                        />
+                        {/* Left feather fade */}
+                        <div className={`absolute inset-y-0 left-0 w-20 bg-gradient-to-r ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
+                        {/* Gold top border */}
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853]/60 to-transparent" />
+                      </div>
+                    </motion.div>
+                  )}
 
                   {/* Hover line effect */}
                   <motion.div

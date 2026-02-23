@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Mail, Instagram, ArrowUp } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
+import { useState, useEffect } from 'react'
 
 const Footer = () => {
   const { theme } = useTheme()
@@ -33,6 +34,25 @@ const Footer = () => {
   }
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  // Live IST clock
+  const [time, setTime] = useState<string | null>(null)
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date()
+      const ist = new Intl.DateTimeFormat('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      }).format(now)
+      setTime(ist)
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <footer className={`relative overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}>
@@ -151,7 +171,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex items-center justify-between pt-10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-10">
           <motion.p
             className={`text-sm font-light ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}
             initial={{ opacity: 0 }}
@@ -159,8 +179,23 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.6 }}
           >
-            © {currentYear} <span className={`font-serif italic ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>Sagar Bawankule</span> — All rights reserved.
+            &copy; {currentYear} <span className={`font-serif italic ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>Sagar Bawankule</span> &mdash; Crafted with intention.
           </motion.p>
+
+          {/* Live IST Clock */}
+          {time && (
+            <motion.div
+              className={`flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.65 }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Nagpur, India</span>
+              <span className={`${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>{time} IST</span>
+            </motion.div>
+          )}
 
           <motion.button
             onClick={scrollToTop}
