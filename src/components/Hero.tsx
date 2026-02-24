@@ -15,7 +15,6 @@ interface HeroData {
 export default function Hero() {
   const [heroData, setHeroData] = useState<HeroData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [hoveredLetter, setHoveredLetter] = useState<number | null>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const containerRef = useRef<HTMLDivElement>(null)
@@ -113,7 +112,7 @@ export default function Hero() {
       filter: 'blur(0px)',
       transition: {
         duration: 1.5,
-        delay: 0.5 + i * 0.1,
+        delay: 0.5 + i * 0.08,
         ease: [0.16, 1, 0.3, 1],
       },
     }),
@@ -131,6 +130,18 @@ export default function Hero() {
         ease: [0.16, 1, 0.3, 1],
       },
     }),
+  }
+
+  // Subtle continuous breathing animation for WELCOME text
+  const breathingVariants = {
+    animate: {
+      opacity: [1, 0.92, 1],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
   }
 
   // Parallax offsets
@@ -165,9 +176,6 @@ export default function Hero() {
         />
       </div>
 
-      {/* Cinematic scanline texture */}
-      <div className="scanline-overlay" aria-hidden="true" />
-
       <div className="container mx-auto px-6 sm:px-12 lg:px-20 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Tagline / Introduction */}
@@ -201,10 +209,15 @@ export default function Hero() {
 
           {/* Main Typographic Headline */}
           <div className="relative mb-12">
+            {/* Subtle gradient overlay behind letters */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#d4a853]/5 to-transparent opacity-60 blur-3xl" />
+            
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-              <div
-                className="flex flex-nowrap overflow-hidden"
+              <motion.div
+                className="flex flex-nowrap overflow-hidden relative"
                 style={{ perspective: '1200px' }}
+                variants={breathingVariants}
+                animate="animate"
               >
                 {welcomeText.split('').map((letter, i) => (
                   <motion.span
@@ -213,24 +226,12 @@ export default function Hero() {
                     variants={letterVariants}
                     initial="hidden"
                     animate="visible"
-                    className={`font-serif font-black text-[clamp(4rem,13vw,13rem)] leading-[0.8] tracking-[-0.03em] select-none cursor-default transition-all duration-700 ${
-                      hoveredLetter === i
-                        ? 'text-[#d4a853] hero-letter-glow-active'
-                        : 'text-white hero-letter-glow'
-                    }`}
-                    onMouseEnter={() => setHoveredLetter(i)}
-                    onMouseLeave={() => setHoveredLetter(null)}
-                    whileHover={{
-                      scale: 1.1,
-                      y: -10,
-                      rotateZ: i % 2 === 0 ? 2 : -2,
-                      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
-                    }}
+                    className="font-serif font-black text-[clamp(4rem,13vw,13rem)] leading-[0.8] tracking-[-0.03em] select-none text-white"
                   >
                     {letter}
                   </motion.span>
                 ))}
-              </div>
+              </motion.div>
 
               <motion.div
                 variants={fadeUpVariants}
