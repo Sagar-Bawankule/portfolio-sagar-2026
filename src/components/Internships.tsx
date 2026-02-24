@@ -85,154 +85,120 @@ export default function Internships() {
             </div>
           </div>
 
-          {/* Internship Entries — Editorial List */}
-          <div>
+          {/* Internship Entries — Full-width cards with ghost watermark */}
+          <div className="space-y-6">
             {internships.map((internship, index) => (
               <motion.div
                 key={internship.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.9, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`group relative border-t transition-colors duration-500 cursor-pointer ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+                className={`group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-500 ${isDark
+                  ? hoveredIndex === index ? 'border-[#d4a853]/30 bg-[#d4a853]/[0.04]' : 'border-white/5 bg-white/[0.015]'
+                  : hoveredIndex === index ? 'border-[#c47a4a]/30 bg-[#c47a4a]/[0.04]' : 'border-black/5 bg-black/[0.015]'
+                }`}
                 onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
               >
-                <div className="py-10 sm:py-14">
-                  {/* Top Row — Number, Title, Company, Duration */}
-                  <div className="grid grid-cols-12 gap-6 items-start">
-                    {/* Number */}
-                    <div className="col-span-1 hidden sm:block">
-                      <span className={`text-sm font-mono transition-colors duration-500 ${hoveredIndex === index
-                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                        : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
-                        }`}>
-                        {internship.number}
-                      </span>
-                    </div>
+                {/* Ghost large number watermark */}
+                <motion.span
+                  className={`absolute -right-4 -bottom-4 text-[10rem] sm:text-[14rem] font-black font-serif pointer-events-none select-none leading-none transition-all duration-700 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}
+                  animate={{ opacity: hoveredIndex === index ? 0.07 : 0.03 }}
+                >
+                  {internship.number}
+                </motion.span>
 
-                    {/* Title */}
-                    <div className="col-span-12 sm:col-span-5">
-                      <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
+                <div className="relative z-10 p-8 sm:p-10">
+                  {/* Top row */}
+                  <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+                    <div>
+                      <div className={`text-[10px] uppercase tracking-[0.35em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                        {internship.type}
+                      </div>
+                      <h3 className={`text-2xl sm:text-4xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
                         ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
                         : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-                        }`}>
+                      }`}>
                         {internship.title}
                       </h3>
-                      {internship.achievement && (
-                        <span className={`inline-flex items-center gap-1.5 mt-3 text-xs font-mono uppercase tracking-widest ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
-                          <Award className="w-3.5 h-3.5" />
-                          {internship.achievement}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Company */}
-                    <div className="col-span-12 sm:col-span-4">
-                      <p className={`text-base font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                      <p className={`text-lg font-light mt-1 ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
                         {internship.company}
                       </p>
-                      <div className={`flex items-center gap-3 mt-2 text-sm ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-                        <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5" />
-                          <span>{internship.duration}</span>
-                        </div>
-                        <span className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#6b6259]' : 'bg-[#8a8178]'}`} />
-                        <span>{internship.type}</span>
-                      </div>
                     </div>
 
-                    {/* Status */}
-                    <div className="col-span-12 sm:col-span-2 sm:text-right">
-                      <span className={`inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest ${internship.achievement
-                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                        : 'text-emerald-400'
-                        }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${internship.achievement
-                          ? isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'
-                          : 'bg-emerald-400'
-                          }`} />
+                    <div className="flex flex-col items-end gap-3">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest ${
+                        internship.achievement
+                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                          : 'text-emerald-400'
+                      }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                          internship.achievement
+                            ? isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'
+                            : 'bg-emerald-400'
+                        }`} />
                         {internship.status}
                       </span>
+                      <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                        <Calendar className="w-3.5 h-3.5" />
+                        {internship.duration}
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className={`h-px mb-6 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
+
+                  {/* Tech tags */}
+                  <div className="flex flex-wrap gap-3 mb-4">
+                    {internship.focus.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`text-xs font-mono px-3 py-1.5 rounded-full border transition-colors duration-300 ${isDark
+                          ? 'border-white/8 text-[#a89f94] group-hover:border-[#d4a853]/20 group-hover:text-[#d4a853]'
+                          : 'border-black/8 text-[#5c5449] group-hover:border-[#c47a4a]/20 group-hover:text-[#c47a4a]'
+                        }`}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Expand hint */}
+                  <div className={`flex items-center gap-2 text-xs font-mono uppercase tracking-widest transition-opacity duration-300 ${
+                    hoveredIndex === index ? 'opacity-100' : 'opacity-40'
+                  } ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                    <motion.span
+                      animate={{ rotate: expandedIndex === index ? 45 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-base leading-none"
+                    >+</motion.span>
+                    {expandedIndex === index ? 'collapse' : 'expand details'}
                   </div>
 
                   {/* Expanded Content */}
                   <motion.div
                     initial={false}
-                    animate={{
-                      height: expandedIndex === index ? 'auto' : 0,
-                      opacity: expandedIndex === index ? 1 : 0
-                    }}
+                    animate={{ height: expandedIndex === index ? 'auto' : 0, opacity: expandedIndex === index ? 1 : 0 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="grid grid-cols-12 gap-6 mt-8 pt-8" style={{ borderTop: isDark ? '1px solid rgba(255,255,255,0.03)' : '1px solid rgba(0,0,0,0.03)' }}>
-                      <div className="col-span-1 hidden sm:block" />
-
-                      {/* Description */}
-                      <div className="col-span-12 sm:col-span-5">
-                        <p className={`text-lg font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
-                          {internship.description}
-                        </p>
-                      </div>
-
-                      {/* Focus Areas */}
-                      <div className="col-span-12 sm:col-span-4">
-                        <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-4 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
-                          Focus Areas
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                          {internship.focus.map((skill) => (
-                            <span
-                              key={skill}
-                              className={`text-sm font-medium transition-colors duration-300 cursor-default ${isDark ? 'text-[#f5f0eb] hover:text-[#d4a853]' : 'text-[#1a1612] hover:text-[#c47a4a]'}`}
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* View Certificate */}
-                      <div className="col-span-12 sm:col-span-2 sm:text-right">
-                        <motion.a
-                          href="#"
-                          className={`inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 group/link ${isDark ? 'text-[#d4a853] hover:text-[#f0b429]' : 'text-[#c47a4a] hover:text-[#e8985a]'}`}
-                          whileHover={{ x: 3 }}
-                        >
-                          <span className="relative pb-0.5">
-                            Certificate
-                            <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#d4a853]/40' : 'bg-[#c47a4a]/40'}`} />
-                          </span>
-                          <ArrowUpRight className="w-4 h-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                        </motion.a>
-                      </div>
+                    <div className={`mt-6 pt-6 border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}>
+                      <p className={`text-base font-light leading-relaxed mb-6 ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                        {internship.description}
+                      </p>
+                      {internship.achievement && (
+                        <span className={`inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                          <Award className="w-4 h-4" />
+                          {internship.achievement}
+                        </span>
+                      )}
                     </div>
                   </motion.div>
-
-                  {/* Expand hint */}
-                  <motion.div
-                    className={`mt-4 text-xs font-mono uppercase tracking-widest transition-opacity duration-300 ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'
-                      } ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}
-                  >
-                    {expandedIndex === index ? '− collapse' : '+ expand'}
-                  </motion.div>
                 </div>
-
-                {/* Hover line effect */}
-                <motion.div
-                  className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
-                  initial={{ width: 0 }}
-                  animate={{ width: hoveredIndex === index ? '100%' : 0 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                />
               </motion.div>
             ))}
-
-            {/* Final bottom border */}
-            <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
           </div>
 
           {/* Bottom editorial note */}

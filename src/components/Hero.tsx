@@ -2,7 +2,7 @@
 
 import { Download, Mail, ArrowDownRight, ArrowRight, Sparkles } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useScroll } from 'framer-motion'
 import { useTheme } from '@/context/ThemeContext'
 
 interface HeroData {
@@ -19,6 +19,20 @@ export default function Hero() {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Scroll-driven compress-in-place effect
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  })
+
+  // Smooth the scroll progress with a spring so motion feels organic
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20, mass: 0.5 })
+
+  const heroScale = useTransform(smoothProgress, [0, 1], [1, 0.82])
+  const heroOpacity = useTransform(smoothProgress, [0, 0.65], [1, 0])
+  const heroBorderRadius = useTransform(smoothProgress, [0, 0.9], [0, 36])
+  const heroBlur = useTransform(smoothProgress, [0, 0.7], [0, 18])
 
   // Tech stack as requested
   const techStack = [
@@ -124,10 +138,20 @@ export default function Hero() {
   const bgOffsetY = useTransform(smoothMouseY, [0, 1], [-20, 20])
 
   return (
-    <section
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
-      id="home"
+    <div
       ref={containerRef}
+      className="sticky top-0 h-screen z-0"
+    >
+    <motion.section
+      className="w-full h-full flex items-center justify-center relative overflow-hidden bg-black"
+      id="home"
+      style={{
+        scale: heroScale,
+        opacity: heroOpacity,
+        borderRadius: heroBorderRadius,
+        filter: useTransform(heroBlur, (v) => `blur(${v}px)`),
+        transformOrigin: 'center center',
+      }}
     >
       {/* Cinematic Smoke / Blur blobs */}
       <div className="absolute inset-0 pointer-events-none">
@@ -305,6 +329,7 @@ export default function Hero() {
           style={{ originY: 0 }}
         />
       </motion.div>
-    </section>
+    </motion.section>
+    </div>
   )
 }

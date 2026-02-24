@@ -89,86 +89,90 @@ export default function Education() {
             </div>
           </div>
 
-          {/* Education Entries — Editorial List Style */}
-          <div>
+          {/* Education Entries — Vertical Timeline */}
+          <div className="relative">
+            {/* Spine line */}
+            <motion.div
+              className={`absolute left-[11px] sm:left-[23px] top-0 bottom-0 w-px ${isDark ? 'bg-gradient-to-b from-[#d4a853]/40 via-[#d4a853]/10 to-transparent' : 'bg-gradient-to-b from-[#c47a4a]/40 via-[#c47a4a]/10 to-transparent'}`}
+              initial={{ scaleY: 0, originY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            />
+
             {educationData.map((edu, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.9, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`group relative border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+                className="relative pl-10 sm:pl-16 pb-14 last:pb-0 group cursor-default"
               >
-                <div className="py-10 sm:py-12 grid grid-cols-12 gap-6 items-start cursor-default">
-
-                  {/* Number */}
-                  <div className="col-span-1 hidden sm:block">
-                    <span className={`text-sm font-mono transition-colors duration-500 ${hoveredIndex === index
-                      ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                      : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
-                      }`}>
-                      {edu.number}
-                    </span>
-                  </div>
-
-                  {/* Degree */}
-                  <div className="col-span-12 sm:col-span-5">
-                    <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
-                      ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                      : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-                      }`}>
-                      {edu.degree}
-                    </h3>
-                    {edu.status && (
-                      <span className="inline-flex items-center gap-1.5 mt-2 text-emerald-400 text-xs font-mono uppercase tracking-widest">
-                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                        {edu.status}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Institution */}
-                  <div className="col-span-12 sm:col-span-4">
-                    <p className={`text-base font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
-                      {edu.institution}
-                    </p>
-                    <div className={`flex items-center gap-2 mt-2 text-sm ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{edu.period}</span>
-                    </div>
-                  </div>
-
-                  {/* Score */}
-                  <div className="col-span-12 sm:col-span-2 sm:text-right">
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-500 ${hoveredIndex === index
-                      ? isDark
-                        ? 'bg-[#d4a853]/10 border-[#d4a853]/30 text-[#d4a853]'
-                        : 'bg-[#c47a4a]/10 border-[#c47a4a]/30 text-[#c47a4a]'
-                      : isDark
-                        ? 'bg-white/3 border-white/8 text-[#a89f94]'
-                        : 'bg-black/3 border-black/8 text-[#5c5449]'
-                      }`}>
-                      <Award className="w-4 h-4" />
-                      <span className="text-sm font-bold">{edu.score}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hover line effect */}
+                {/* Timeline dot */}
                 <motion.div
-                  className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
-                  initial={{ width: 0 }}
-                  animate={{ width: hoveredIndex === index ? '100%' : 0 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                />
+                  className={`absolute left-0 sm:left-3 top-2 w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-colors duration-500 ${hoveredIndex === index
+                    ? isDark ? 'border-[#d4a853] bg-[#d4a853]/15' : 'border-[#c47a4a] bg-[#c47a4a]/15'
+                    : isDark ? 'border-[#3a3228] bg-[#080604]' : 'border-[#d4c5b0] bg-[#faf8f5]'
+                  }`}
+                  whileInView={{ scale: [0, 1.2, 1] }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
+                >
+                  <span className={`w-2 h-2 rounded-full transition-colors duration-500 ${hoveredIndex === index
+                    ? isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'
+                    : isDark ? 'bg-[#3a3228]' : 'bg-[#d4c5b0]'
+                  }`} />
+                </motion.div>
+
+                {/* Card */}
+                <div className={`relative p-6 sm:p-8 rounded-2xl border transition-all duration-500 ${isDark
+                  ? hoveredIndex === index ? 'border-[#d4a853]/25 bg-[#d4a853]/[0.04]' : 'border-white/5 bg-white/[0.015]'
+                  : hoveredIndex === index ? 'border-[#c47a4a]/25 bg-[#c47a4a]/[0.04]' : 'border-black/5 bg-black/[0.015]'
+                }`}>
+                  {/* Period pill */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                      <Calendar className="w-3.5 h-3.5" />
+                      {edu.period}
+                    </div>
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold transition-all duration-500 ${
+                      hoveredIndex === index
+                        ? isDark ? 'border-[#d4a853]/30 text-[#d4a853] bg-[#d4a853]/10' : 'border-[#c47a4a]/30 text-[#c47a4a] bg-[#c47a4a]/10'
+                        : isDark ? 'border-white/8 text-[#a89f94]' : 'border-black/8 text-[#5c5449]'
+                    }`}>
+                      <Award className="w-3 h-3" />
+                      {edu.score}
+                    </div>
+                  </div>
+
+                  <h3 className={`text-xl sm:text-2xl font-bold tracking-tight mb-2 transition-colors duration-500 ${hoveredIndex === index
+                    ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                    : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
+                  }`}>
+                    {edu.degree}
+                  </h3>
+
+                  <p className={`text-sm font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                    {edu.institution}
+                  </p>
+
+                  {edu.status && (
+                    <span className="inline-flex items-center gap-1.5 mt-3 text-emerald-400 text-xs font-mono uppercase tracking-widest">
+                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                      {edu.status}
+                    </span>
+                  )}
+
+                  {/* Ghost number */}
+                  <span className={`absolute bottom-3 right-5 text-6xl font-black font-serif pointer-events-none select-none leading-none transition-opacity duration-500 ${hoveredIndex === index ? 'opacity-[0.06]' : 'opacity-[0.03]'} ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                    {edu.number}
+                  </span>
+                </div>
               </motion.div>
             ))}
-
-            {/* Final bottom border */}
-            <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
           </div>
         </div>
       </div>

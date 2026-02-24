@@ -60,8 +60,13 @@ module.exports = {
         'shimmer': 'shimmer 2.5s linear infinite',
         'gradient-x': 'gradientX 15s ease infinite',
         'grain': 'grain 8s steps(10) infinite',
+        'marquee': 'marquee 20s linear infinite',
       },
       keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
         fadeUp: {
           '0%': { opacity: '0', transform: 'translateY(40px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },

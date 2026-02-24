@@ -34,20 +34,28 @@ export default function Home() {
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
 
-      <main className={`min-h-screen transition-opacity duration-700 ${introComplete ? 'opacity-100' : 'opacity-0'}`}>
+      <main className={`transition-opacity duration-700 ${introComplete ? 'opacity-100' : 'opacity-0'}`}>
         <Navbar />
-        <Hero />
-        <Marquee />
-        <About />
-        <Education />
-        <Marquee />
-        <Internships />
-        <Projects />
-        <Marquee />
-        <Skills />
-        <Certifications />
-        <Contact />
-        <Footer />
+
+        {/* Hero sticky container — 200vh gives scroll room for the compress effect */}
+        <div className="relative z-0 h-[200vh]">
+          <Hero />
+        </div>
+
+        {/* Content slides up over the sticky Hero — negative margin pulls it up flush */}
+        <div className="relative z-10 -mt-[100vh]">
+          <Marquee />
+          <About />
+          <Education />
+          <Marquee />
+          <Internships />
+          <Projects />
+          <Marquee />
+          <Skills />
+          <Certifications />
+          <Contact />
+          <Footer />
+        </div>
       </main>
     </>
   )

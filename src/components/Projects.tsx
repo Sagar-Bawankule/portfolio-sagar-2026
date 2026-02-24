@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ExternalLink, Github, Brain, Leaf, Zap, Monitor, ArrowUpRight } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
@@ -25,6 +25,176 @@ const iconMap: Record<string, any> = {
   Leaf,
   Zap,
   Monitor,
+}
+
+// — Scroll-driven featured project row —
+function FeaturedRow({
+  project, index, isDark, hoveredIndex, setHoveredIndex
+}: {
+  project: Project
+  index: number
+  isDark: boolean
+  hoveredIndex: number | null
+  setHoveredIndex: (i: number | null) => void
+}) {
+  const IconComponent = project.icon ? (iconMap[project.icon] || Zap) : Zap
+  const rowRef = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: ['start 0.9', 'start 0.2'],
+  })
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 55, damping: 22, mass: 0.5 })
+
+  // Title slides in from left
+  const titleX = useTransform(smoothProgress, [0, 1], [-60, 0])
+  const titleOpacity = useTransform(smoothProgress, [0, 0.5], [0, 1])
+
+  // Stack slides in from right
+  const stackX = useTransform(smoothProgress, [0, 1], [60, 0])
+  const stackOpacity = useTransform(smoothProgress, [0, 0.5], [0, 1])
+
+  // Number scales up from tiny
+  const numScale = useTransform(smoothProgress, [0, 1], [0.3, 1])
+  const numOpacity = useTransform(smoothProgress, [0, 0.6], [0, 1])
+
+  // Row itself fades in
+  const rowOpacity = useTransform(smoothProgress, [0, 0.3], [0, 1])
+
+  const isHovered = hoveredIndex === index
+
+  return (
+    <motion.div
+      ref={rowRef}
+      style={{ opacity: rowOpacity }}
+      onMouseEnter={() => setHoveredIndex(index)}
+      onMouseLeave={() => setHoveredIndex(null)}
+      data-cursor="view"
+      className={`group relative overflow-hidden border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+    >
+      <div className="py-10 sm:py-14 grid grid-cols-12 gap-6 lg:gap-10 items-start">
+
+        {/* Number — scales up on scroll */}
+        <motion.div
+          className="col-span-1 hidden sm:block"
+          style={{ scale: numScale, opacity: numOpacity }}
+        >
+          <span className={`text-sm font-mono transition-colors duration-500 ${isHovered
+            ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+            : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
+          }`}>
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </motion.div>
+
+        {/* Title & Description — slides from left */}
+        <motion.div
+          className="col-span-12 sm:col-span-5"
+          style={{ x: titleX, opacity: titleOpacity }}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${isHovered
+              ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+              : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
+            }`}>
+              {project.title}
+            </h3>
+            {project.status && (
+              <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                {project.status}
+              </span>
+            )}
+          </div>
+          <p className={`text-base font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+            {project.description}
+          </p>
+        </motion.div>
+
+        {/* Technologies — slides from right */}
+        <motion.div
+          className="col-span-12 sm:col-span-4"
+          style={{ x: stackX, opacity: stackOpacity }}
+        >
+          <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+            Stack
+          </p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            {project.technologies.map((tech) => (
+              <span
+                key={tech}
+                className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#f5f0eb]' : 'text-[#5c5449] hover:text-[#1a1612]'}`}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Links */}
+        <motion.div
+          className="col-span-12 sm:col-span-2 flex sm:flex-col sm:items-end gap-4 relative z-20"
+          style={{ opacity: titleOpacity }}
+        >
+          {project.githubUrl && (
+            <motion.a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#d4a853]' : 'text-[#5c5449] hover:text-[#c47a4a]'}`}
+              whileHover={{ x: 3 }}
+            >
+              <span className="relative pb-0.5">
+                Code
+                <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#6b6259]/30' : 'bg-[#8a8178]/30'}`} />
+              </span>
+              <Github className="w-4 h-4" />
+            </motion.a>
+          )}
+          {project.liveUrl && (
+            <motion.a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#d4a853]' : 'text-[#1a1612] hover:text-[#c47a4a]'}`}
+              whileHover={{ x: 3 }}
+            >
+              <span className="relative pb-0.5">
+                Live
+                <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#d4a853]/40' : 'bg-[#c47a4a]/40'}`} />
+              </span>
+              <ArrowUpRight className="w-4 h-4" />
+            </motion.a>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Hover image reveal */}
+      {project.image && (
+        <motion.div
+          className="absolute top-0 right-4 h-full w-56 sm:w-72 pointer-events-none z-10"
+          initial={{ x: '110%', opacity: 0 }}
+          animate={{ x: isHovered ? '0%' : '110%', opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="relative h-full w-full">
+            <Image src={project.image} alt={project.title} fill className="object-cover" sizes="288px" />
+            <div className={`absolute inset-y-0 left-0 w-28 bg-gradient-to-r ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
+            <div className={`absolute inset-y-0 right-0 w-16 bg-gradient-to-l ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853]/60 to-transparent" />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Hover bottom line */}
+      <motion.div
+        className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+        initial={{ width: 0 }}
+        animate={{ width: isHovered ? '100%' : 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      />
+    </motion.div>
+  )
 }
 
 const Projects = () => {
@@ -118,147 +288,18 @@ const Projects = () => {
             </div>
           </div>
 
-          {/* Featured Projects — Editorial Cards */}
-          <div className="space-y-6 mb-24">
-            {featuredProjects.map((project, index) => {
-              const IconComponent = project.icon ? (iconMap[project.icon] || Zap) : Zap
-
-              return (
-                <motion.div
-                  key={project._id}
-                  ref={el => { rowRef.current[index] = el }}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  data-cursor="view"
-                  className={`group relative overflow-hidden border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
-                >
-                  <div className="py-10 sm:py-14 grid grid-cols-12 gap-6 lg:gap-10 items-start">
-
-                    {/* Number */}
-                    <div className="col-span-1 hidden sm:block">
-                      <span className={`text-sm font-mono transition-colors duration-500 ${hoveredIndex === index
-                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                        : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
-                        }`}>
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    {/* Title & Description */}
-                    <div className="col-span-12 sm:col-span-5">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
-                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                          : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-                          }`}>
-                          {project.title}
-                        </h3>
-                        {project.status && (
-                          <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-widest flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                            {project.status}
-                          </span>
-                        )}
-                      </div>
-                      <p className={`text-base font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
-                        {project.description}
-                      </p>
-                    </div>
-
-                    {/* Technologies */}
-                    <div className="col-span-12 sm:col-span-4">
-                      <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
-                        Stack
-                      </p>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1">
-                        {project.technologies.map((tech, techIndex) => (
-                          <span
-                            key={tech}
-                            className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#f5f0eb]' : 'text-[#5c5449] hover:text-[#1a1612]'}`}
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Links */}
-                    <div className="col-span-12 sm:col-span-2 flex sm:flex-col sm:items-end gap-4">
-                      {project.githubUrl && (
-                        <motion.a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#d4a853]' : 'text-[#5c5449] hover:text-[#c47a4a]'}`}
-                          whileHover={{ x: 3 }}
-                        >
-                          <span className="relative pb-0.5">
-                            Code
-                            <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#6b6259]/30' : 'bg-[#8a8178]/30'}`} />
-                          </span>
-                          <Github className="w-4 h-4" />
-                        </motion.a>
-                      )}
-                      {project.liveUrl && (
-                        <motion.a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#d4a853]' : 'text-[#1a1612] hover:text-[#c47a4a]'}`}
-                          whileHover={{ x: 3 }}
-                        >
-                          <span className="relative pb-0.5">
-                            Live
-                            <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#d4a853]/40' : 'bg-[#c47a4a]/40'}`} />
-                          </span>
-                          <ArrowUpRight className="w-4 h-4" />
-                        </motion.a>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Hover image reveal — slides in from right */}
-                  {project.image && (
-                    <motion.div
-                      className="absolute top-0 right-0 h-full w-48 sm:w-64 pointer-events-none z-10"
-                      initial={{ x: '100%', opacity: 0 }}
-                      animate={{
-                        x: hoveredIndex === index ? '0%' : '100%',
-                        opacity: hoveredIndex === index ? 1 : 0,
-                      }}
-                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <div className="relative h-full w-full">
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                          sizes="256px"
-                        />
-                        {/* Left feather fade */}
-                        <div className={`absolute inset-y-0 left-0 w-20 bg-gradient-to-r ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
-                        {/* Gold top border */}
-                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853]/60 to-transparent" />
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Hover line effect */}
-                  <motion.div
-                    className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
-                    initial={{ width: 0 }}
-                    animate={{ width: hoveredIndex === index ? '100%' : 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </motion.div>
-              )
-            })}
-            {/* Final border */}
+          {/* Featured Projects — Scroll-driven rows */}
+          <div className="space-y-0 mb-24">
+            {featuredProjects.map((project, index) => (
+              <FeaturedRow
+                key={project._id}
+                project={project}
+                index={index}
+                isDark={isDark}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+              />
+            ))}
             <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
           </div>
 
@@ -282,19 +323,29 @@ const Projects = () => {
                 {otherProjects.map((project, index) => (
                   <motion.div
                     key={project._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.08 }}
-                    className={`group relative p-6 rounded-xl border transition-all duration-500 ${isDark
-                      ? 'border-white/5 hover:border-[#d4a853]/20 bg-white/[0.01] hover:bg-white/[0.02]'
-                      : 'border-black/5 hover:border-[#c47a4a]/20 bg-black/[0.01] hover:bg-black/[0.02]'
-                      }`}
+                    initial={{ opacity: 0, y: 50, rotateX: 15, filter: 'blur(6px)' }}
+                    whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.75, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ transformPerspective: 800 }}
+                    whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+                    className={`group relative p-6 rounded-xl border transition-colors duration-500 ${isDark
+                      ? 'border-white/5 hover:border-[#d4a853]/25 bg-white/[0.01] hover:bg-white/[0.03]'
+                      : 'border-black/5 hover:border-[#c47a4a]/25 bg-black/[0.01] hover:bg-black/[0.03]'
+                    }`}
                   >
+                    {/* Animated gold top border on hover */}
+                    <motion.div
+                      className={`absolute top-0 left-0 h-[2px] rounded-t-xl ${isDark ? 'bg-gradient-to-r from-[#d4a853] to-[#c47a4a]' : 'bg-gradient-to-r from-[#c47a4a] to-[#d4a853]'}`}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '40%' }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.9, delay: index * 0.1 + 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    />
                     <h4 className={`text-lg font-bold tracking-tight mb-2 transition-colors duration-300 ${isDark
                       ? 'text-[#f5f0eb] group-hover:text-[#d4a853]'
                       : 'text-[#1a1612] group-hover:text-[#c47a4a]'
-                      }`}>
+                    }`}>
                       {project.title}
                     </h4>
                     <p className={`text-sm font-light leading-relaxed mb-4 line-clamp-2 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
@@ -314,16 +365,20 @@ const Projects = () => {
                     </div>
                     <div className="flex gap-4">
                       {project.githubUrl && (
-                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
-                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}>
+                        <motion.a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
+                          whileHover={{ scale: 1.2 }}
+                        >
                           <Github className="w-4 h-4" />
-                        </a>
+                        </motion.a>
                       )}
                       {project.liveUrl && (
-                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}>
+                        <motion.a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
+                          whileHover={{ scale: 1.2, rotate: -10 }}
+                        >
                           <ArrowUpRight className="w-4 h-4" />
-                        </a>
+                        </motion.a>
                       )}
                     </div>
                   </motion.div>

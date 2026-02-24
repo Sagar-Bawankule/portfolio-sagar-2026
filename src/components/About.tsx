@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import { useTheme } from '@/context/ThemeContext'
 import { ArrowRight, Sparkles } from 'lucide-react'
@@ -45,6 +45,28 @@ export default function About() {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
+  // — ALL hooks must be declared before any conditional return —
+
+  // Scroll-driven photo parallax
+  const photoRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress: photoScroll } = useScroll({
+    target: photoRef,
+    offset: ['start end', 'end start'],
+  })
+  const smoothPhotoScroll = useSpring(photoScroll, { stiffness: 40, damping: 18, mass: 0.6 })
+  const photoY = useTransform(smoothPhotoScroll, [0, 1], [40, -40])
+
+  // Scroll-driven intro text clip-path wipe
+  const introRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress: introScroll } = useScroll({
+    target: introRef,
+    offset: ['start 0.85', 'start 0.3'],
+  })
+  const smoothIntroScroll = useSpring(introScroll, { stiffness: 55, damping: 22, mass: 0.5 })
+  const introClip = useTransform(smoothIntroScroll, [0, 1], ['inset(0 100% 0 0)', 'inset(0 0% 0 0)'])
+  const introX = useTransform(smoothIntroScroll, [0, 1], [30, 0])
+  const introOpacity = useTransform(smoothIntroScroll, [0, 0.4], [0, 1])
+
   useEffect(() => {
     const fetchAbout = async () => {
       try {
@@ -87,7 +109,7 @@ export default function About() {
 
   return (
     <section
-      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-32 overflow-hidden rounded-t-[2rem] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="about"
     >
       {/* Subtle background elements */}
@@ -141,13 +163,14 @@ export default function About() {
 
             {/* Left Column — Photo (editorial framing) */}
             <motion.div
+              ref={photoRef}
               className="lg:col-span-5"
               initial={{ opacity: 0, x: -40, filter: 'blur(10px)' }}
               whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}
               transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="relative group">
+              <motion.div className="relative group" style={{ y: photoY }}>
                 {/* Warm ambient glow */}
                 <motion.div
                   className={`absolute -inset-6 rounded-3xl blur-3xl ${isDark ? 'bg-[#d4a853]/8' : 'bg-[#c47a4a]/5'}`}
@@ -208,7 +231,7 @@ export default function About() {
                   <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                   <span className="text-xs font-bold tracking-wide">Available for Work</span>
                 </motion.div>
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* Right Column — Content (editorial typography) */}
@@ -220,11 +243,14 @@ export default function About() {
               transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Introduction */}
-              <div>
-                <p className={`text-xl sm:text-2xl leading-[1.7] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+              <motion.div ref={introRef}>
+                <motion.p
+                  className={`text-xl sm:text-2xl leading-[1.7] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}
+                  style={{ clipPath: introClip, x: introX, opacity: introOpacity }}
+                >
                   {aboutData.introduction}
-                </p>
-              </div>
+                </motion.p>
+              </motion.div>
 
               {/* Editorial Quote — full width, big italic serif */}
               <motion.div

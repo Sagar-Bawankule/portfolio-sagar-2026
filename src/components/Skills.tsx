@@ -1,8 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Code2, Database, Brain, Wrench, Cloud, Shield, Zap, Globe } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
+import { Code2, Database, Brain, Wrench, Cloud, Shield, Zap, Globe, ChevronUp, ChevronDown } from 'lucide-react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useTheme } from '@/context/ThemeContext'
 
 interface Skill {
@@ -20,31 +20,71 @@ interface SkillCategory {
 }
 
 const iconMap: Record<string, any> = {
-  Code2,
-  Database,
-  Brain,
-  Wrench,
-  Cloud,
-  Shield,
-  Zap,
-  Globe
+  Code2, Database, Brain, Wrench, Cloud, Shield, Zap, Globe
 }
 
 const currentlyLearning = [
-  { name: "Rust", color: "text-orange-400" },
-  { name: "Go", color: "text-cyan-400" },
-  { name: "Kubernetes", color: "text-blue-400" },
-  { name: "Web3", color: "text-purple-400" },
-  { name: "System Design", color: "text-emerald-400" },
+  "Rust", "Go", "Kubernetes", "Web3", "System Design", "LLM Fine-tuning", "WebAssembly",
 ]
+
+// Spotlight card — mouse-tracked radial glow
+function SpotlightCard({
+  children,
+  className,
+  isDark,
+}: {
+  children: React.ReactNode
+  className?: string
+  isDark: boolean
+}) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 20 })
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 20 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseX.set(e.clientX - rect.left)
+    mouseY.set(e.clientY - rect.top)
+  }
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      className={`group relative overflow-hidden ${className ?? ''}`}
+    >
+      {/* Mouse-tracked radial spotlight */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: useTransform(
+            [springX, springY],
+            ([x, y]) =>
+              `radial-gradient(320px circle at ${x}px ${y}px, ${isDark ? 'rgba(212,168,83,0.07)' : 'rgba(196,122,74,0.06)'}, transparent 70%)`
+          ),
+        }}
+      />
+      {children}
+    </div>
+  )
+}
 
 const Skills = () => {
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([])
   const [loading, setLoading] = useState(true)
-  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null)
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState<number>(0)
+  const [direction, setDirection] = useState<1 | -1>(1) // 1 = down/next, -1 = up/prev
   const { theme } = useTheme()
   const isDark = theme === 'dark'
+
+  // Refs for scroll hijacking
+  const panelRef = useRef<HTMLDivElement>(null)
+  const isHijacking = useRef(false)
+  const wheelAccum = useRef(0)
+  const WHEEL_THRESHOLD = 60 // px of delta needed to trigger category change
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -60,9 +100,76 @@ const Skills = () => {
         setLoading(false)
       }
     }
-
     fetchSkills()
   }, [])
+
+  // Navigate categories
+  const goTo = useCallback((index: number, dir: 1 | -1) => {
+    setDirection(dir)
+    setActiveCategory(index)
+  }, [])
+
+  const goNext = useCallback(() => {
+    setSkillCategories(cats => {
+      const next = (activeCategory + 1) % cats.length
+      goTo(next, 1)
+      return cats
+    })
+  }, [activeCategory, goTo])
+
+  const goPrev = useCallback(() => {
+    setSkillCategories(cats => {
+      const prev = (activeCategory - 1 + cats.length) % cats.length
+      goTo(prev, -1)
+      return cats
+    })
+  }, [activeCategory, goTo])
+
+  // Wheel scroll hijack on the panel
+  useEffect(() => {
+    if (!skillCategories.length) return
+    const el = panelRef.current
+    if (!el) return
+
+    const onWheel = (e: WheelEvent) => {
+      // Only hijack when pointer is over the panel
+      if (!el.contains(e.target as Node)) return
+
+      wheelAccum.current += e.deltaY
+
+      if (Math.abs(wheelAccum.current) >= WHEEL_THRESHOLD) {
+        const dir = wheelAccum.current > 0 ? 1 : -1
+        wheelAccum.current = 0
+
+        if (dir === 1) {
+          // Scrolling down → next category; at last category let page scroll
+          if (activeCategory < skillCategories.length - 1) {
+            e.preventDefault()
+            e.stopPropagation()
+            goTo(activeCategory + 1, 1)
+          }
+        } else {
+          // Scrolling up → prev category; at first category let page scroll
+          if (activeCategory > 0) {
+            e.preventDefault()
+            e.stopPropagation()
+            goTo(activeCategory - 1, -1)
+          }
+        }
+      } else {
+        // Accumulating — prevent page scroll while building up
+        if (
+          (e.deltaY > 0 && activeCategory < skillCategories.length - 1) ||
+          (e.deltaY < 0 && activeCategory > 0)
+        ) {
+          e.preventDefault()
+        }
+      }
+    }
+
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [skillCategories, activeCategory, goTo])
 
   if (loading) {
     return (
@@ -70,10 +177,11 @@ const Skills = () => {
         <div className="container mx-auto px-6 sm:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto animate-pulse">
             <div className="h-20 bg-white/5 rounded w-80 mb-20" />
-            <div className="space-y-4">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className="h-24 bg-white/3 rounded" />
-              ))}
+            <div className="flex gap-6">
+              <div className="w-64 shrink-0 space-y-3">
+                {[1, 2, 3, 4].map(i => <div key={i} className="h-14 bg-white/3 rounded-xl" />)}
+              </div>
+              <div className="flex-1 h-80 bg-white/3 rounded-2xl" />
             </div>
           </div>
         </div>
@@ -81,24 +189,53 @@ const Skills = () => {
     )
   }
 
+  const active = skillCategories[activeCategory]
+  const ActiveIcon = active ? (iconMap[active.icon] || Code2) : Code2
+
+  // Slide variants: direction-aware
+  const panelVariants = {
+    enter: (dir: number) => ({
+      y: dir > 0 ? 40 : -40,
+      opacity: 0,
+      filter: 'blur(8px)',
+    }),
+    center: {
+      y: 0,
+      opacity: 1,
+      filter: 'blur(0px)',
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    },
+    exit: (dir: number) => ({
+      y: dir > 0 ? -40 : 40,
+      opacity: 0,
+      filter: 'blur(8px)',
+      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    }),
+  }
+
   return (
     <section
       className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="skills"
     >
-      {/* Background ambient */}
+      {/* Ambient background */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
-          className={`absolute bottom-1/3 left-0 w-[400px] h-[400px] rounded-full blur-[140px] ${isDark ? 'bg-[#c47a4a]/4' : 'bg-[#d4a853]/3'}`}
-          animate={{ x: [0, 20, 0], y: [0, -12, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+          className={`absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full blur-[180px] ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
+          animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className={`absolute bottom-1/4 left-0 w-[400px] h-[400px] rounded-full blur-[160px] ${isDark ? 'bg-[#c47a4a]/3' : 'bg-[#d4a853]/2'}`}
+          animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
       </div>
 
       <div className="container mx-auto px-6 sm:px-12 lg:px-20 relative z-10">
         <div className="max-w-7xl mx-auto">
 
-          {/* Editorial Section Header */}
+          {/* Header */}
           <div className="mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -109,15 +246,14 @@ const Skills = () => {
             >
               <span className="section-label">05 &mdash; technical expertise</span>
             </motion.div>
-
-            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
+            <div className="flex flex-nowrap overflow-hidden" style={{ perspective: '1200px' }}>
               {"SKILLS".split('').map((letter, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 40, rotateX: -30, filter: 'blur(10px)' }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, y: 60, rotateX: -25 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 1.1, delay: 0.05 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
                   className={`font-serif font-black text-[clamp(4rem,13vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
@@ -126,121 +262,230 @@ const Skills = () => {
             </div>
           </div>
 
-          {/* Skill Categories — Editorial Accordion Style */}
-          <div>
-            {skillCategories.map((category, catIndex) => {
-              const IconComponent = iconMap[category.icon] || Code2
+          {/* Main layout: sidebar tabs + panel */}
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
 
-              return (
-                <motion.div
-                  key={category._id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: catIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  onMouseEnter={() => setHoveredCategory(catIndex)}
-                  onMouseLeave={() => setHoveredCategory(null)}
-                  className={`group relative border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
-                >
-                  <div className="py-10 sm:py-12">
-                    {/* Category Header */}
-                    <div className="grid grid-cols-12 gap-6 items-start mb-8">
-                      {/* Number */}
-                      <div className="col-span-1 hidden sm:block">
-                        <span className={`text-sm font-mono transition-colors duration-500 ${hoveredCategory === catIndex
-                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                          : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
-                          }`}>
-                          {String(catIndex + 1).padStart(2, '0')}
-                        </span>
-                      </div>
+            {/* --- LEFT: Category tab list --- */}
+            <div className="lg:w-64 shrink-0 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+              {skillCategories.map((cat, i) => {
+                const Icon = iconMap[cat.icon] || Code2
+                const isActive = activeCategory === i
+                return (
+                  <motion.button
+                    key={cat._id}
+                    onClick={() => goTo(i, i > activeCategory ? 1 : -1)}
+                    whileHover={{ x: 4 }}
+                    className={`relative shrink-0 flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all duration-400 border overflow-hidden ${
+                      isActive
+                        ? isDark
+                          ? 'border-[#d4a853]/30 bg-[#d4a853]/[0.07] text-[#d4a853]'
+                          : 'border-[#c47a4a]/30 bg-[#c47a4a]/[0.07] text-[#c47a4a]'
+                        : isDark
+                          ? 'border-white/5 bg-transparent text-[#6b6259] hover:text-[#a89f94] hover:border-white/10'
+                          : 'border-black/5 bg-transparent text-[#8a8178] hover:text-[#5c5449] hover:border-black/10'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeBar"
+                        className={`absolute left-0 top-0 h-full w-[3px] rounded-r-full ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                      />
+                    )}
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span className="text-sm font-semibold tracking-tight whitespace-nowrap">{cat.title}</span>
+                    <span className={`ml-auto text-[10px] font-mono shrink-0 ${
+                      isActive
+                        ? isDark ? 'text-[#d4a853]/60' : 'text-[#c47a4a]/60'
+                        : isDark ? 'text-[#3a3228]' : 'text-[#d4c5b0]'
+                    }`}>
+                      {cat.skills.length}
+                    </span>
+                  </motion.button>
+                )
+              })}
 
-                      {/* Category Name */}
-                      <div className="col-span-12 sm:col-span-4">
-                        <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${hoveredCategory === catIndex
-                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                          : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-                          }`}>
-                          {category.title}
-                        </h3>
-                        <p className={`text-sm font-light mt-1 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-                          {category.description}
-                        </p>
-                      </div>
+              {/* Progress dots — desktop only */}
+              <div className="hidden lg:flex flex-col items-center gap-1.5 mt-4 pl-1">
+                {skillCategories.map((_, i) => (
+                  <motion.div
+                    key={i}
+                    animate={{
+                      width: activeCategory === i ? 20 : 6,
+                      opacity: activeCategory === i ? 1 : 0.3,
+                    }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className={`h-1.5 rounded-full cursor-pointer ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                    onClick={() => goTo(i, i > activeCategory ? 1 : -1)}
+                  />
+                ))}
+              </div>
+            </div>
 
-                      {/* Skills — displayed as editorial text list */}
-                      <div className="col-span-12 sm:col-span-7">
-                        <div className="flex flex-wrap gap-x-5 gap-y-3">
-                          {category.skills.map((skill) => (
-                            <motion.span
+            {/* --- RIGHT: Scroll-hijacked panel --- */}
+            <div className="flex-1 min-w-0 flex gap-3 items-stretch">
+
+              {/* Panel with AnimatePresence slide */}
+              <div
+                ref={panelRef}
+                className="flex-1 min-w-0 relative overflow-hidden rounded-2xl"
+                style={{ cursor: 'ns-resize' }}
+              >
+                <AnimatePresence custom={direction} mode="wait">
+                  {active && (
+                    <motion.div
+                      key={active._id}
+                      custom={direction}
+                      variants={panelVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                    >
+                      <SpotlightCard
+                        isDark={isDark}
+                        className={`rounded-2xl border p-8 sm:p-10 ${
+                          isDark ? 'border-white/6 bg-white/[0.02]' : 'border-black/6 bg-black/[0.02]'
+                        }`}
+                      >
+                        {/* Panel header */}
+                        <div className="relative z-10 flex items-start justify-between mb-8">
+                          <div>
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className={`p-2 rounded-lg border ${isDark ? 'border-[#d4a853]/20 bg-[#d4a853]/8 text-[#d4a853]' : 'border-[#c47a4a]/20 bg-[#c47a4a]/8 text-[#c47a4a]'}`}>
+                                <ActiveIcon className="w-5 h-5" />
+                              </div>
+                              <h3 className={`text-2xl font-bold tracking-tight ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
+                                {active.title}
+                              </h3>
+                            </div>
+                            <p className={`text-sm font-light max-w-lg ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                              {active.description}
+                            </p>
+                          </div>
+                          {/* Ghost index */}
+                          <span className={`text-[6rem] font-black font-serif leading-none select-none pointer-events-none ${isDark ? 'text-[#d4a853]/4' : 'text-[#c47a4a]/4'}`}>
+                            {String(activeCategory + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+
+                        {/* Skills list with animated fill bars */}
+                        <div className="relative z-10 space-y-3">
+                          {active.skills.map((skill, si) => (
+                            <motion.div
                               key={skill.name}
-                              onMouseEnter={() => setHoveredSkill(skill.name)}
-                              onMouseLeave={() => setHoveredSkill(null)}
-                              className={`relative text-lg font-medium cursor-default transition-all duration-400 pb-1 ${hoveredSkill === skill.name
-                                ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                                : isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'
-                                }`}
-                              whileHover={{ y: -2 }}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.45, delay: si * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                              className={`group/skill flex items-center gap-4 px-4 py-3 rounded-xl border transition-all duration-300 cursor-default ${
+                                isDark
+                                  ? 'border-white/4 bg-white/[0.01] hover:border-[#d4a853]/20 hover:bg-[#d4a853]/[0.04]'
+                                  : 'border-black/4 bg-black/[0.01] hover:border-[#c47a4a]/20 hover:bg-[#c47a4a]/[0.04]'
+                              }`}
                             >
-                              {skill.name}
-                              <motion.span
-                                className={`absolute bottom-0 left-0 h-px ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
-                                initial={{ width: 0 }}
-                                animate={{ width: hoveredSkill === skill.name ? '100%' : 0 }}
-                                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                              />
-                            </motion.span>
+                              <div className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-300 ${isDark ? 'bg-[#3a3228] group-hover/skill:bg-[#d4a853]' : 'bg-[#d4c5b0] group-hover/skill:bg-[#c47a4a]'}`} />
+                              <span className={`text-sm font-medium w-36 shrink-0 transition-colors duration-300 ${isDark ? 'text-[#a89f94] group-hover/skill:text-[#d4a853]' : 'text-[#5c5449] group-hover/skill:text-[#c47a4a]'}`}>
+                                {skill.name}
+                              </span>
+                              <div className={`flex-1 h-[3px] rounded-full overflow-hidden ${isDark ? 'bg-white/5' : 'bg-black/5'}`}>
+                                <motion.div
+                                  initial={{ scaleX: 0 }}
+                                  animate={{ scaleX: 1 }}
+                                  transition={{ duration: 0.9, delay: 0.2 + si * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                                  style={{ originX: 0 }}
+                                  className={`h-full rounded-full ${isDark ? 'bg-gradient-to-r from-[#d4a853] to-[#c47a4a]' : 'bg-gradient-to-r from-[#c47a4a] to-[#d4a853]'}`}
+                                />
+                              </div>
+                            </motion.div>
                           ))}
                         </div>
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Hover line effect */}
-                  <motion.div
-                    className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
-                    initial={{ width: 0 }}
-                    animate={{ width: hoveredCategory === catIndex ? '100%' : 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </motion.div>
-              )
-            })}
-            {/* Final bottom border */}
-            <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
+                        {/* Scroll hint pill — bottom of panel */}
+                        <div className="relative z-10 mt-8 flex items-center justify-center">
+                          <motion.div
+                            animate={{ opacity: [0.4, 0.8, 0.4] }}
+                            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                            className={`flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] ${isDark ? 'text-[#3a3228]' : 'text-[#d4c5b0]'}`}
+                          >
+                            <ChevronUp className="w-3 h-3" />
+                            scroll to navigate
+                            <ChevronDown className="w-3 h-3" />
+                          </motion.div>
+                        </div>
+                      </SpotlightCard>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* --- Arrow nav column (desktop) --- */}
+              <div className="hidden lg:flex flex-col justify-center gap-3">
+                <motion.button
+                  onClick={() => activeCategory > 0 && goTo(activeCategory - 1, -1)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ opacity: activeCategory > 0 ? 1 : 0.2 }}
+                  className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                    isDark
+                      ? activeCategory > 0
+                        ? 'border-[#d4a853]/30 text-[#d4a853] hover:bg-[#d4a853]/10'
+                        : 'border-white/5 text-[#3a3228] cursor-not-allowed'
+                      : activeCategory > 0
+                        ? 'border-[#c47a4a]/30 text-[#c47a4a] hover:bg-[#c47a4a]/10'
+                        : 'border-black/5 text-[#d4c5b0] cursor-not-allowed'
+                  }`}
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </motion.button>
+
+                <motion.button
+                  onClick={() => activeCategory < skillCategories.length - 1 && goTo(activeCategory + 1, 1)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ opacity: activeCategory < skillCategories.length - 1 ? 1 : 0.2 }}
+                  className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                    isDark
+                      ? activeCategory < skillCategories.length - 1
+                        ? 'border-[#d4a853]/30 text-[#d4a853] hover:bg-[#d4a853]/10'
+                        : 'border-white/5 text-[#3a3228] cursor-not-allowed'
+                      : activeCategory < skillCategories.length - 1
+                        ? 'border-[#c47a4a]/30 text-[#c47a4a] hover:bg-[#c47a4a]/10'
+                        : 'border-black/5 text-[#d4c5b0] cursor-not-allowed'
+                  }`}
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </motion.button>
+              </div>
+            </div>
           </div>
 
-          {/* Currently Learning — Editorial Bottom Section */}
+          {/* Currently Exploring — full-width ticker strip */}
           <motion.div
-            className="mt-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            className="mt-24"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
           >
-            <div className="flex items-center gap-4 mb-10">
-              <span className={`text-[10px] uppercase tracking-[0.4em] font-mono ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
-                Currently Exploring
+            <div className={`border-t border-b py-5 ${isDark ? 'border-white/6' : 'border-black/6'} overflow-hidden relative`}>
+              {/* Label */}
+              <span className={`absolute left-0 top-0 h-full flex items-center px-4 text-[9px] uppercase tracking-[0.4em] font-mono z-10 ${isDark ? 'text-[#d4a853] bg-[#080604]' : 'text-[#c47a4a] bg-[#faf8f5]'}`}>
+                Exploring
               </span>
-              <div className={`h-px flex-1 ${isDark ? 'bg-[#d4a853]/10' : 'bg-[#c47a4a]/10'}`} />
-            </div>
 
-            <div className="flex flex-wrap gap-x-8 gap-y-4">
-              {currentlyLearning.map((tech, index) => (
-                <motion.span
-                  key={tech.name}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5 + index * 0.08 }}
-                  className={`text-2xl sm:text-3xl font-serif italic cursor-default transition-all duration-500 ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
-                  whileHover={{ y: -4, scale: 1.05 }}
-                >
-                  {tech.name}
-                </motion.span>
-              ))}
+              {/* Scrolling strip */}
+              <div className="flex gap-10 pl-28 animate-[marquee_20s_linear_infinite]">
+                {[...currentlyLearning, ...currentlyLearning].map((tech, i) => (
+                  <span
+                    key={i}
+                    className={`text-lg font-serif italic whitespace-nowrap shrink-0 ${isDark ? 'text-[#4a4038]' : 'text-[#c5b9a8]'}`}
+                  >
+                    {tech}
+                    <span className={`ml-10 not-italic font-sans text-xs ${isDark ? 'text-[#2a2018]' : 'text-[#e0d5c5]'}`}>✦</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>
