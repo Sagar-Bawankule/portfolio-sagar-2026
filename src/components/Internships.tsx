@@ -45,6 +45,9 @@ export default function Internships() {
       className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="internships"
     >
+      {/* Section top divider */}
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div

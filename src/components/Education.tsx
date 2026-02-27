@@ -46,9 +46,12 @@ export default function Education() {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
       id="education"
     >
+      {/* Section top divider */}
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -114,7 +117,7 @@ export default function Education() {
                 <motion.div
                   className={`absolute left-0 sm:left-3 top-2 w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-colors duration-500 ${hoveredIndex === index
                     ? isDark ? 'border-[#d4a853] bg-[#d4a853]/15' : 'border-[#c47a4a] bg-[#c47a4a]/15'
-                    : isDark ? 'border-[#3a3228] bg-[#080604]' : 'border-[#d4c5b0] bg-[#faf8f5]'
+                    : isDark ? 'border-[#3a3228] bg-[#0f0d0a]' : 'border-[#d4c5b0] bg-[#f5f2ed]'
                   }`}
                   whileInView={{ scale: [0, 1.2, 1] }}
                   viewport={{ once: true }}

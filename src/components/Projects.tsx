@@ -228,7 +228,7 @@ const Projects = () => {
 
   if (loading) {
     return (
-      <section className={`relative py-32 ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`} id="projects">
+      <section className={`relative py-32 ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`} id="projects">
         <div className="container mx-auto px-6 sm:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto animate-pulse">
             <div className="h-20 bg-white/5 rounded w-96 mb-20" />
@@ -245,9 +245,12 @@ const Projects = () => {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
       id="projects"
     >
+      {/* Section top divider */}
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div

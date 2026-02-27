@@ -55,7 +55,7 @@ const Footer = () => {
   }, [])
 
   return (
-    <footer className={`relative overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}>
+    <footer className={`relative overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}>
       {/* Top divider */}
       <div className={`h-px mx-6 sm:mx-12 lg:mx-20 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
 
