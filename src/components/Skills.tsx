@@ -278,8 +278,8 @@ const Skills = () => {
                     className={`relative shrink-0 flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all duration-400 border overflow-hidden ${
                       isActive
                         ? isDark
-                          ? 'border-[#d4a853]/30 bg-[#d4a853]/[0.07] text-[#d4a853]'
-                          : 'border-[#c47a4a]/30 bg-[#c47a4a]/[0.07] text-[#c47a4a]'
+                          ? 'border-[#fbbf24]/30 bg-[#fbbf24]/[0.07] text-[#fbbf24]'
+                          : 'border-[#d97706]/30 bg-[#d97706]/[0.07] text-[#d97706]'
                         : isDark
                           ? 'border-white/5 bg-transparent text-[#6b6259] hover:text-[#a89f94] hover:border-white/10'
                           : 'border-black/5 bg-transparent text-[#8a8178] hover:text-[#5c5449] hover:border-black/10'
@@ -288,14 +288,14 @@ const Skills = () => {
                     {isActive && (
                       <motion.div
                         layoutId="activeBar"
-                        className={`absolute left-0 top-0 h-full w-[3px] rounded-r-full ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                        className={`absolute left-0 top-0 h-full w-[3px] rounded-r-full ${isDark ? 'bg-[#fbbf24]' : 'bg-[#d97706]'}`}
                       />
                     )}
                     <Icon className="w-4 h-4 shrink-0" />
                     <span className="text-sm font-semibold tracking-tight whitespace-nowrap">{cat.title}</span>
                     <span className={`ml-auto text-[10px] font-mono shrink-0 ${
                       isActive
-                        ? isDark ? 'text-[#d4a853]/60' : 'text-[#c47a4a]/60'
+                        ? isDark ? 'text-[#fbbf24]/60' : 'text-[#d97706]/60'
                         : isDark ? 'text-[#3a3228]' : 'text-[#d4c5b0]'
                     }`}>
                       {cat.skills.length}
@@ -314,7 +314,7 @@ const Skills = () => {
                       opacity: activeCategory === i ? 1 : 0.3,
                     }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className={`h-1.5 rounded-full cursor-pointer ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+                    className={`h-1.5 rounded-full cursor-pointer ${isDark ? 'bg-[#fbbf24]' : 'bg-[#d97706]'}`}
                     onClick={() => goTo(i, i > activeCategory ? 1 : -1)}
                   />
                 ))}
@@ -350,7 +350,7 @@ const Skills = () => {
                         <div className="relative z-10 flex items-start justify-between mb-8">
                           <div>
                             <div className="flex items-center gap-3 mb-2">
-                              <div className={`p-2 rounded-lg border ${isDark ? 'border-[#d4a853]/20 bg-[#d4a853]/8 text-[#d4a853]' : 'border-[#c47a4a]/20 bg-[#c47a4a]/8 text-[#c47a4a]'}`}>
+                              <div className={`p-2 rounded-lg border ${isDark ? 'border-[#fbbf24]/20 bg-[#fbbf24]/8 text-[#fbbf24]' : 'border-[#d97706]/20 bg-[#d97706]/8 text-[#d97706]'}`}>
                                 <ActiveIcon className="w-5 h-5" />
                               </div>
                               <h3 className={`text-2xl font-bold tracking-tight ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
@@ -362,7 +362,7 @@ const Skills = () => {
                             </p>
                           </div>
                           {/* Ghost index */}
-                          <span className={`text-[6rem] font-black font-serif leading-none select-none pointer-events-none ${isDark ? 'text-[#d4a853]/4' : 'text-[#c47a4a]/4'}`}>
+                          <span className={`text-[6rem] font-black font-serif leading-none select-none pointer-events-none ${isDark ? 'text-[#fbbf24]/4' : 'text-[#d97706]/4'}`}>
                             {String(activeCategory + 1).padStart(2, '0')}
                           </span>
                         </div>
@@ -377,12 +377,12 @@ const Skills = () => {
                               transition={{ duration: 0.45, delay: si * 0.05, ease: [0.16, 1, 0.3, 1] }}
                               className={`group/skill flex items-center gap-4 px-4 py-3 rounded-xl border transition-all duration-300 cursor-default ${
                                 isDark
-                                  ? 'border-white/4 bg-white/[0.01] hover:border-[#d4a853]/20 hover:bg-[#d4a853]/[0.04]'
-                                  : 'border-black/4 bg-black/[0.01] hover:border-[#c47a4a]/20 hover:bg-[#c47a4a]/[0.04]'
+                                  ? 'border-white/4 bg-white/[0.01] hover:border-[#fbbf24]/20 hover:bg-[#fbbf24]/[0.04]'
+                                  : 'border-black/4 bg-black/[0.01] hover:border-[#d97706]/20 hover:bg-[#d97706]/[0.04]'
                               }`}
                             >
-                              <div className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-300 ${isDark ? 'bg-[#3a3228] group-hover/skill:bg-[#d4a853]' : 'bg-[#d4c5b0] group-hover/skill:bg-[#c47a4a]'}`} />
-                              <span className={`text-sm font-medium w-36 shrink-0 transition-colors duration-300 ${isDark ? 'text-[#a89f94] group-hover/skill:text-[#d4a853]' : 'text-[#5c5449] group-hover/skill:text-[#c47a4a]'}`}>
+                              <div className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-300 ${isDark ? 'bg-[#3a3228] group-hover/skill:bg-[#fbbf24]' : 'bg-[#d4c5b0] group-hover/skill:bg-[#d97706]'}`} />
+                              <span className={`text-sm font-medium w-36 shrink-0 transition-colors duration-300 ${isDark ? 'text-[#a89f94] group-hover/skill:text-[#fbbf24]' : 'text-[#5c5449] group-hover/skill:text-[#d97706]'}`}>
                                 {skill.name}
                               </span>
                               <div className={`flex-1 h-[3px] rounded-full overflow-hidden ${isDark ? 'bg-white/5' : 'bg-black/5'}`}>
@@ -391,7 +391,7 @@ const Skills = () => {
                                   animate={{ scaleX: 1 }}
                                   transition={{ duration: 0.9, delay: 0.2 + si * 0.06, ease: [0.16, 1, 0.3, 1] }}
                                   style={{ originX: 0 }}
-                                  className={`h-full rounded-full ${isDark ? 'bg-gradient-to-r from-[#d4a853] to-[#c47a4a]' : 'bg-gradient-to-r from-[#c47a4a] to-[#d4a853]'}`}
+                                  className={`h-full rounded-full ${isDark ? 'bg-gradient-to-r from-[#fbbf24] to-[#f59e0b]' : 'bg-gradient-to-r from-[#d97706] to-[#fbbf24]'}`}
                                 />
                               </div>
                             </motion.div>
@@ -426,10 +426,10 @@ const Skills = () => {
                   className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
                     isDark
                       ? activeCategory > 0
-                        ? 'border-[#d4a853]/30 text-[#d4a853] hover:bg-[#d4a853]/10'
+                        ? 'border-[#fbbf24]/30 text-[#fbbf24] hover:bg-[#fbbf24]/10'
                         : 'border-white/5 text-[#3a3228] cursor-not-allowed'
                       : activeCategory > 0
-                        ? 'border-[#c47a4a]/30 text-[#c47a4a] hover:bg-[#c47a4a]/10'
+                        ? 'border-[#d97706]/30 text-[#d97706] hover:bg-[#d97706]/10'
                         : 'border-black/5 text-[#d4c5b0] cursor-not-allowed'
                   }`}
                 >
@@ -444,10 +444,10 @@ const Skills = () => {
                   className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
                     isDark
                       ? activeCategory < skillCategories.length - 1
-                        ? 'border-[#d4a853]/30 text-[#d4a853] hover:bg-[#d4a853]/10'
+                        ? 'border-[#fbbf24]/30 text-[#fbbf24] hover:bg-[#fbbf24]/10'
                         : 'border-white/5 text-[#3a3228] cursor-not-allowed'
                       : activeCategory < skillCategories.length - 1
-                        ? 'border-[#c47a4a]/30 text-[#c47a4a] hover:bg-[#c47a4a]/10'
+                        ? 'border-[#d97706]/30 text-[#d97706] hover:bg-[#d97706]/10'
                         : 'border-black/5 text-[#d4c5b0] cursor-not-allowed'
                   }`}
                 >

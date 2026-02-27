@@ -121,7 +121,7 @@ const Certifications = () => {
                   transition={{ duration: 0.7, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className={`border-b transition-colors duration-300 ${
+                  className={`border-b transition-all duration-300 hover-sweep card-glow-rose ${
                     isDark ? 'border-white/8' : 'border-black/8'
                   }`}
                 >
@@ -138,7 +138,7 @@ const Certifications = () => {
                       {/* Index */}
                       <span className={`font-mono text-xs shrink-0 w-8 transition-colors duration-300 ${
                         isOpen
-                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                          ? isDark ? 'text-[#fb7185]' : 'text-[#e11d48]'
                           : isDark ? 'text-[#3a3228]' : 'text-[#d4c5b0]'
                       }`}>
                         {String(index + 1).padStart(2, '0')}
@@ -147,7 +147,7 @@ const Certifications = () => {
                       {/* Issuer pill */}
                       <span className={`hidden sm:inline-flex text-[9px] font-mono uppercase tracking-[0.25em] px-2.5 py-1 rounded-full border shrink-0 transition-all duration-300 ${
                         isOpen
-                          ? isDark ? 'border-[#d4a853]/30 bg-[#d4a853]/8 text-[#d4a853]' : 'border-[#c47a4a]/30 bg-[#c47a4a]/8 text-[#c47a4a]'
+                          ? isDark ? 'border-[#fb7185]/30 bg-[#fb7185]/8 text-[#fb7185]' : 'border-[#e11d48]/30 bg-[#e11d48]/8 text-[#e11d48]'
                           : isDark ? 'border-white/8 text-[#6b6259]' : 'border-black/8 text-[#8a8178]'
                       }`}>
                         {cert.issuer}
@@ -156,9 +156,9 @@ const Certifications = () => {
                       {/* Title */}
                       <h3 className={`flex-1 text-base sm:text-lg font-bold tracking-tight transition-colors duration-300 ${
                         isOpen
-                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                          ? isDark ? 'text-[#fb7185]' : 'text-[#e11d48]'
                           : isHovered
-                            ? isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
+                            ? isDark ? 'text-[#fb7185]' : 'text-[#e11d48]'
                             : isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'
                       }`}>
                         {cert.title}
@@ -176,7 +176,7 @@ const Certifications = () => {
                         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                         className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${
                           isOpen
-                            ? isDark ? 'border-[#d4a853]/40 bg-[#d4a853]/10 text-[#d4a853]' : 'border-[#c47a4a]/40 bg-[#c47a4a]/10 text-[#c47a4a]'
+                            ? isDark ? 'border-[#fb7185]/40 bg-[#fb7185]/10 text-[#fb7185]' : 'border-[#e11d48]/40 bg-[#e11d48]/10 text-[#e11d48]'
                             : isDark ? 'border-white/10 text-[#6b6259]' : 'border-black/10 text-[#8a8178]'
                         }`}
                       >
@@ -214,8 +214,8 @@ const Certifications = () => {
                                   transition={{ delay: si * 0.04, duration: 0.3 }}
                                   className={`text-xs font-mono px-3 py-1 rounded-full border transition-colors duration-300 ${
                                     isDark
-                                      ? 'border-white/8 text-[#6b6259] hover:border-[#d4a853]/30 hover:text-[#d4a853]'
-                                      : 'border-black/8 text-[#8a8178] hover:border-[#c47a4a]/30 hover:text-[#c47a4a]'
+                                      ? 'border-white/8 text-[#6b6259] hover:border-[#fb7185]/30 hover:text-[#fb7185]'
+                                      : 'border-black/8 text-[#8a8178] hover:border-[#e11d48]/30 hover:text-[#e11d48]'
                                   }`}
                                 >
                                   {skill}
@@ -235,8 +235,8 @@ const Certifications = () => {
                               transition={{ delay: 0.1, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                               className={`group/link self-start flex items-center gap-2 text-sm font-semibold tracking-wide px-5 py-2.5 rounded-full border transition-all duration-400 ${
                                 isDark
-                                  ? 'border-[#d4a853]/25 text-[#d4a853] hover:bg-[#d4a853]/8 hover:border-[#d4a853]/50'
-                                  : 'border-[#c47a4a]/25 text-[#c47a4a] hover:bg-[#c47a4a]/8 hover:border-[#c47a4a]/50'
+                                  ? 'border-[#fb7185]/25 text-[#fb7185] hover:bg-[#fb7185]/8 hover:border-[#fb7185]/50 hover:shadow-[0_0_20px_rgba(251,113,133,0.15)]'
+                                  : 'border-[#e11d48]/25 text-[#e11d48] hover:bg-[#e11d48]/8 hover:border-[#e11d48]/50'
                               }`}
                               onClick={e => e.stopPropagation()}
                             >

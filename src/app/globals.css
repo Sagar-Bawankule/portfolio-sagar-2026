@@ -764,6 +764,102 @@ object {
 }
 
 /* ========================================
+   HOVER GLOW SWEEP — Warm shimmer that sweeps across on hover
+   ======================================== */
+
+@keyframes glow-sweep {
+  0% { left: -100%; opacity: 0; }
+  50% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+.hover-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.06), rgba(212, 168, 83, 0.12), rgba(212, 168, 83, 0.06), transparent);
+  pointer-events: none;
+  transition: none;
+}
+
+.hover-sweep:hover::after {
+  animation: glow-sweep 0.8s ease-out;
+}
+
+[data-theme="light"] .hover-sweep::after {
+  background: linear-gradient(90deg, transparent, rgba(196, 122, 74, 0.05), rgba(196, 122, 74, 0.1), rgba(196, 122, 74, 0.05), transparent);
+}
+
+/* ========================================
+   BREATHING RING — Subtle pulse ring for badges
+   ======================================== */
+
+@keyframes breathing-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+}
+
+.breathing-ring {
+  animation: breathing-ring 2.5s ease-in-out infinite;
+}
+
+/* ========================================
+   WARM FOCUS GLOW — For form inputs
+   ======================================== */
+
+.warm-focus-glow:focus {
+  box-shadow: 0 2px 20px rgba(212, 168, 83, 0.12), 0 0 0 1px rgba(212, 168, 83, 0.2);
+}
+
+[data-theme="light"] .warm-focus-glow:focus {
+  box-shadow: 0 2px 20px rgba(196, 122, 74, 0.1), 0 0 0 1px rgba(196, 122, 74, 0.15);
+}
+
+/* ========================================
+   SECTION-COLORED HOVER CARD GLOW
+   ======================================== */
+
+.card-glow-teal { transition: box-shadow 0.5s ease; }
+.card-glow-teal:hover { box-shadow: 0 0 40px rgba(45, 212, 191, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+
+.card-glow-emerald { transition: box-shadow 0.5s ease; }
+.card-glow-emerald:hover { box-shadow: 0 0 40px rgba(74, 222, 128, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+
+.card-glow-indigo { transition: box-shadow 0.5s ease; }
+.card-glow-indigo:hover { box-shadow: 0 0 40px rgba(129, 140, 248, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+
+.card-glow-amber { transition: box-shadow 0.5s ease; }
+.card-glow-amber:hover { box-shadow: 0 0 40px rgba(251, 191, 36, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+
+.card-glow-rose { transition: box-shadow 0.5s ease; }
+.card-glow-rose:hover { box-shadow: 0 0 40px rgba(251, 113, 133, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+
+.card-glow-violet { transition: box-shadow 0.5s ease; }
+.card-glow-violet:hover { box-shadow: 0 0 40px rgba(192, 132, 252, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+
+[data-theme="light"] .card-glow-teal:hover { box-shadow: 0 0 30px rgba(13, 148, 136, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
+[data-theme="light"] .card-glow-emerald:hover { box-shadow: 0 0 30px rgba(22, 163, 74, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
+[data-theme="light"] .card-glow-indigo:hover { box-shadow: 0 0 30px rgba(79, 70, 229, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
+[data-theme="light"] .card-glow-amber:hover { box-shadow: 0 0 30px rgba(217, 119, 6, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
+[data-theme="light"] .card-glow-rose:hover { box-shadow: 0 0 30px rgba(225, 29, 72, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
+[data-theme="light"] .card-glow-violet:hover { box-shadow: 0 0 30px rgba(124, 58, 237, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
+
+/* Nav link glow underline */
+@keyframes nav-glow-sweep {
+  0% { width: 0; left: 50%; opacity: 0; }
+  50% { opacity: 1; }
+  100% { width: 60%; left: 20%; opacity: 0.8; }
+}
+
+/* ========================================
    CUSTOM SELECTION — WARM
    ======================================== */
 

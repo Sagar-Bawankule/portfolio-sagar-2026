@@ -27,30 +27,18 @@ const iconMap: Record<string, any> = {
   Monitor,
 }
 
-// Per-project accent colors — cycles through the palette
-const PROJECT_COLORS = [
-  { dark: '#2dd4bf', light: '#0d9488', glow: 'rgba(45,212,191,0.06)' },  // teal
-  { dark: '#d4a853', light: '#c47a4a', glow: 'rgba(212,168,83,0.06)' },  // gold
-  { dark: '#c084fc', light: '#7c3aed', glow: 'rgba(192,132,252,0.06)' }, // violet
-  { dark: '#fb7185', light: '#e11d48', glow: 'rgba(251,113,133,0.06)' }, // rose
-  { dark: '#818cf8', light: '#4f46e5', glow: 'rgba(129,140,248,0.06)' }, // indigo
-  { dark: '#fbbf24', light: '#d97706', glow: 'rgba(251,191,36,0.06)' },  // amber
-]
-
 // — Scroll-driven featured project row —
 function FeaturedRow({
-  project, index, isDark, hoveredIndex, setHoveredIndex, accentColor
+  project, index, isDark, hoveredIndex, setHoveredIndex
 }: {
   project: Project
   index: number
   isDark: boolean
   hoveredIndex: number | null
   setHoveredIndex: (i: number | null) => void
-  accentColor: { dark: string; light: string; glow: string }
 }) {
   const IconComponent = project.icon ? (iconMap[project.icon] || Zap) : Zap
   const rowRef = useRef<HTMLDivElement>(null)
-  const accent = isDark ? accentColor.dark : accentColor.light
 
   const { scrollYProgress } = useScroll({
     target: rowRef,
@@ -78,24 +66,12 @@ function FeaturedRow({
   return (
     <motion.div
       ref={rowRef}
-      style={{
-        opacity: rowOpacity,
-        borderColor: isHovered ? `${accent}33` : isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-      }}
+      style={{ opacity: rowOpacity }}
       onMouseEnter={() => setHoveredIndex(index)}
       onMouseLeave={() => setHoveredIndex(null)}
       data-cursor="view"
-      className="group relative overflow-hidden border-t transition-colors duration-500"
+      className={`group relative overflow-hidden border-t transition-all duration-500 ${isDark ? 'border-white/5 hover:border-[#818cf8]/20' : 'border-black/5 hover:border-[#4f46e5]/20'}`}
     >
-      {/* Colored hover sweep background */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.4 }}
-        style={{ background: `linear-gradient(135deg, ${accentColor.glow} 0%, transparent 60%)` }}
-      />
-
       <div className="py-6 sm:py-10 grid grid-cols-12 gap-6 lg:gap-10 items-start">
 
         {/* Number — scales up on scroll */}
@@ -103,10 +79,10 @@ function FeaturedRow({
           className="col-span-1 hidden sm:block"
           style={{ scale: numScale, opacity: numOpacity }}
         >
-          <span
-            className="text-sm font-mono transition-colors duration-500"
-            style={{ color: isHovered ? accent : isDark ? '#6b6259' : '#8a8178' }}
-          >
+          <span className={`text-sm font-mono transition-colors duration-500 ${isHovered
+            ? isDark ? 'text-[#818cf8]' : 'text-[#4f46e5]'
+            : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
+          }`}>
             {String(index + 1).padStart(2, '0')}
           </span>
         </motion.div>
@@ -117,27 +93,15 @@ function FeaturedRow({
           style={{ x: titleX, opacity: titleOpacity }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <h3
-              className="text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500"
-              style={{ color: isHovered ? accent : isDark ? '#f5f0eb' : '#1a1612' }}
-            >
+            <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${isHovered
+              ? isDark ? 'text-[#818cf8]' : 'text-[#4f46e5]'
+              : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
+            }`}>
               {project.title}
             </h3>
             {project.status && (
-              <span
-                className="text-[10px] font-mono uppercase tracking-widest flex items-center gap-1.5 px-2 py-0.5 rounded-full border"
-                style={{
-                  color: accent,
-                  borderColor: `${accent}40`,
-                  backgroundColor: `${accent}10`,
-                  boxShadow: isHovered ? `0 0 10px ${accent}30` : 'none',
-                  transition: 'box-shadow 0.4s ease',
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full animate-pulse"
-                  style={{ backgroundColor: accent }}
-                />
+              <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-widest flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
                 {project.status}
               </span>
             )}
@@ -152,7 +116,7 @@ function FeaturedRow({
           className="col-span-12 sm:col-span-4"
           style={{ x: stackX, opacity: stackOpacity }}
         >
-          <p className="text-[10px] uppercase tracking-[0.3em] font-mono mb-3" style={{ color: accent }}>
+          <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
             Stack
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -217,15 +181,14 @@ function FeaturedRow({
             <Image src={project.image} alt={project.title} fill className="object-cover" sizes="288px" />
             <div className={`absolute inset-y-0 left-0 w-28 bg-gradient-to-r ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
             <div className={`absolute inset-y-0 right-0 w-16 bg-gradient-to-l ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4a853]/60 to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#818cf8]/60 to-transparent" />
           </div>
         </motion.div>
       )}
 
       {/* Hover bottom line */}
       <motion.div
-        className="absolute bottom-0 left-0 h-[1px]"
-        style={{ backgroundColor: accent }}
+        className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#818cf8]' : 'bg-[#4f46e5]'}`}
         initial={{ width: 0 }}
         animate={{ width: isHovered ? '100%' : 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -341,7 +304,6 @@ const Projects = () => {
                 isDark={isDark}
                 hoveredIndex={hoveredIndex}
                 setHoveredIndex={setHoveredIndex}
-                accentColor={PROJECT_COLORS[index % PROJECT_COLORS.length]}
               />
             ))}
             <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
@@ -373,22 +335,22 @@ const Projects = () => {
                     transition={{ duration: 0.75, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                     style={{ transformPerspective: 800 }}
                     whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-                    className={`group relative p-6 rounded-xl border transition-colors duration-500 ${isDark
-                      ? 'border-white/5 hover:border-[#d4a853]/25 bg-white/[0.01] hover:bg-white/[0.03]'
-                      : 'border-black/5 hover:border-[#c47a4a]/25 bg-black/[0.01] hover:bg-black/[0.03]'
+                    className={`group relative p-6 rounded-xl border transition-colors duration-500 hover-sweep card-glow-indigo ${isDark
+                      ? 'border-white/5 hover:border-[#818cf8]/25 bg-white/[0.01] hover:bg-white/[0.03]'
+                      : 'border-black/5 hover:border-[#4f46e5]/25 bg-black/[0.01] hover:bg-black/[0.03]'
                     }`}
                   >
                     {/* Animated gold top border on hover */}
                     <motion.div
-                      className={`absolute top-0 left-0 h-[2px] rounded-t-xl ${isDark ? 'bg-gradient-to-r from-[#d4a853] to-[#c47a4a]' : 'bg-gradient-to-r from-[#c47a4a] to-[#d4a853]'}`}
+                      className={`absolute top-0 left-0 h-[2px] rounded-t-xl ${isDark ? 'bg-gradient-to-r from-[#818cf8] to-[#6366f1]' : 'bg-gradient-to-r from-[#4f46e5] to-[#818cf8]'}`}
                       initial={{ width: 0 }}
                       whileInView={{ width: '40%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.9, delay: index * 0.1 + 0.4, ease: [0.16, 1, 0.3, 1] }}
                     />
                     <h4 className={`text-lg font-bold tracking-tight mb-2 transition-colors duration-300 ${isDark
-                      ? 'text-[#f5f0eb] group-hover:text-[#d4a853]'
-                      : 'text-[#1a1612] group-hover:text-[#c47a4a]'
+                      ? 'text-[#f5f0eb] group-hover:text-[#818cf8]'
+                      : 'text-[#1a1612] group-hover:text-[#4f46e5]'
                     }`}>
                       {project.title}
                     </h4>
@@ -410,7 +372,7 @@ const Projects = () => {
                     <div className="flex gap-4">
                       {project.githubUrl && (
                         <motion.a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
-                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
+                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#818cf8]' : 'text-[#8a8178] hover:text-[#4f46e5]'}`}
                           whileHover={{ scale: 1.2 }}
                         >
                           <Github className="w-4 h-4" />
@@ -418,7 +380,7 @@ const Projects = () => {
                       )}
                       {project.liveUrl && (
                         <motion.a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#d4a853]' : 'text-[#8a8178] hover:text-[#c47a4a]'}`}
+                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#818cf8]' : 'text-[#8a8178] hover:text-[#4f46e5]'}`}
                           whileHover={{ scale: 1.2, rotate: -10 }}
                         >
                           <ArrowUpRight className="w-4 h-4" />

@@ -120,10 +120,14 @@ const Navbar = () => {
                     <span className="text-[11px] font-mono uppercase tracking-[0.18em] leading-none">
                       {item.name}
                     </span>
-                    {/* Bottom active/hover indicator */}
-                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1.5px] rounded-full transition-all duration-400 ${isActive
-                        ? isDark ? 'w-1/2 bg-[#d4a853]' : 'w-1/2 bg-[#c47a4a]'
-                        : 'w-0 group-hover:w-1/3 ' + (isDark ? 'bg-[#5c5449]' : 'bg-[#8a8178]')
+                    {/* Active gold dot pulse */}
+                    {isActive && (
+                      <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full breathing-ring ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
+                    )}
+                    {/* Bottom active/hover indicator — glowing sweep */}
+                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1.5px] rounded-full transition-all duration-500 ${isActive
+                        ? isDark ? 'w-2/3 bg-[#d4a853] shadow-[0_0_8px_rgba(212,168,83,0.5)]' : 'w-2/3 bg-[#c47a4a] shadow-[0_0_8px_rgba(196,122,74,0.5)]'
+                        : 'w-0 group-hover:w-1/2 ' + (isDark ? 'bg-[#d4a853]/50 group-hover:shadow-[0_0_6px_rgba(212,168,83,0.3)]' : 'bg-[#c47a4a]/50 group-hover:shadow-[0_0_6px_rgba(196,122,74,0.3)]')
                       }`} />
                   </a>
                 )

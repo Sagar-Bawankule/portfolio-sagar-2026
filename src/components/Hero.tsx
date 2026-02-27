@@ -227,7 +227,7 @@ export default function Hero() {
                 <a
                   href={displayData.resumeUrl}
                   download
-                  className={`group relative flex items-center gap-3 sm:gap-4 text-lg sm:text-xl font-medium transition-colors duration-500 ${isDark
+                  className={`group relative flex items-center gap-3 sm:gap-4 text-lg sm:text-xl font-medium transition-all duration-500 hover-sweep ${isDark
                     ? 'text-white hover:text-[#d4a853]'
                     : 'text-[#1a1612] hover:text-[#c47a4a]'
                   }`}
@@ -241,7 +241,7 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className={`group relative flex items-center gap-3 sm:gap-4 text-lg sm:text-xl font-medium transition-colors duration-500 ${isDark
+                  className={`group relative flex items-center gap-3 sm:gap-4 text-lg sm:text-xl font-medium transition-all duration-500 hover-sweep ${isDark
                     ? 'text-white hover:text-[#d4a853]'
                     : 'text-[#1a1612] hover:text-[#c47a4a]'
                   }`}

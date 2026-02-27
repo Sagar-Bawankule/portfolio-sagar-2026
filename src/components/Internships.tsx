@@ -102,15 +102,15 @@ export default function Internships() {
                 transition={{ duration: 0.9, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-500 ${isDark
-                  ? hoveredIndex === index ? 'border-[#d4a853]/30 bg-[#d4a853]/[0.04]' : 'border-white/5 bg-white/[0.015]'
-                  : hoveredIndex === index ? 'border-[#c47a4a]/30 bg-[#c47a4a]/[0.04]' : 'border-black/5 bg-black/[0.015]'
+                className={`group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-500 hover-sweep card-glow-emerald ${isDark
+                  ? hoveredIndex === index ? 'border-[#4ade80]/30 bg-[#4ade80]/[0.04] -translate-y-1' : 'border-white/5 bg-white/[0.015]'
+                  : hoveredIndex === index ? 'border-[#16a34a]/30 bg-[#16a34a]/[0.04] -translate-y-1' : 'border-black/5 bg-black/[0.015]'
                 }`}
                 onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
               >
                 {/* Ghost large number watermark */}
                 <motion.span
-                  className={`absolute -right-4 -bottom-4 text-[7rem] sm:text-[10rem] lg:text-[14rem] font-black font-serif pointer-events-none select-none leading-none transition-all duration-700 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}
+                  className={`absolute -right-4 -bottom-4 text-[7rem] sm:text-[10rem] lg:text-[14rem] font-black font-serif pointer-events-none select-none leading-none transition-all duration-700 ${isDark ? 'text-[#4ade80]' : 'text-[#16a34a]'}`}
                   animate={{ opacity: hoveredIndex === index ? 0.07 : 0.03 }}
                 >
                   {internship.number}
@@ -124,7 +124,7 @@ export default function Internships() {
                         {internship.type}
                       </div>
                       <h3 className={`text-xl sm:text-2xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
-                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                        ? isDark ? 'text-[#4ade80]' : 'text-[#16a34a]'
                         : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
                       }`}>
                         {internship.title}
@@ -163,8 +163,8 @@ export default function Internships() {
                       <span
                         key={tag}
                         className={`text-xs font-mono px-3 py-1.5 rounded-full border transition-colors duration-300 ${isDark
-                          ? 'border-white/8 text-[#a89f94] group-hover:border-[#d4a853]/20 group-hover:text-[#d4a853]'
-                          : 'border-black/8 text-[#5c5449] group-hover:border-[#c47a4a]/20 group-hover:text-[#c47a4a]'
+                          ? 'border-white/8 text-[#a89f94] group-hover:border-[#4ade80]/20 group-hover:text-[#4ade80]'
+                          : 'border-black/8 text-[#5c5449] group-hover:border-[#16a34a]/20 group-hover:text-[#16a34a]'
                         }`}>
                         {tag}
                       </span>

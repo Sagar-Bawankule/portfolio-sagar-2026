@@ -123,7 +123,7 @@ const Footer = () => {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
-                  className={`relative group text-base font-medium transition-colors duration-300 pb-0.5 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
+                  className={`relative group text-base font-medium transition-all duration-300 pb-0.5 hover:scale-105 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
                 >
                   {link.name}
                   <span className={`absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-400 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
@@ -180,10 +180,10 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group flex items-center gap-3 text-base font-medium transition-colors duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
-                  whileHover={{ x: 5 }}
+                  className={`group flex items-center gap-3 text-base font-medium transition-all duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
+                  whileHover={{ x: 5, scale: 1.02 }}
                 >
-                  <social.icon className="w-4 h-4 flex-shrink-0" />
+                  <social.icon className={`w-4 h-4 flex-shrink-0 transition-all duration-300 group-hover:scale-125 ${isDark ? 'group-hover:text-[#d4a853] group-hover:drop-shadow-[0_0_6px_rgba(212,168,83,0.5)]' : 'group-hover:text-[#c47a4a]'}`} />
                   <span className="relative pb-0.5">
                     {social.name}
                     <span className={`absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-400 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
@@ -229,9 +229,10 @@ const Footer = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.7 }}
-            whileHover={{ y: -2 }}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <ArrowUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
+            <ArrowUp className="w-4 h-4 group-hover:-translate-y-2 transition-transform duration-300" />
             Back to top
           </motion.button>
         </div>

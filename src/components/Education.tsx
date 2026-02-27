@@ -119,24 +119,24 @@ export default function Education() {
               >
                 {/* Timeline dot */}
                 <motion.div
-                  className={`absolute left-0 sm:left-3 top-2 w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-colors duration-500 ${hoveredIndex === index
-                    ? isDark ? 'border-[#d4a853] bg-[#d4a853]/15' : 'border-[#c47a4a] bg-[#c47a4a]/15'
+                  className={`absolute left-0 sm:left-3 top-2 w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-all duration-500 ${hoveredIndex === index
+                    ? isDark ? 'border-[#2dd4bf] bg-[#2dd4bf]/15 shadow-[0_0_12px_rgba(45,212,191,0.3)]' : 'border-[#0d9488] bg-[#0d9488]/15 shadow-[0_0_12px_rgba(13,148,136,0.2)]'
                     : isDark ? 'border-[#3a3228] bg-[#0f0d0a]' : 'border-[#d4c5b0] bg-[#f5f2ed]'
                   }`}
                   whileInView={{ scale: [0, 1.2, 1] }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
                 >
-                  <span className={`w-2 h-2 rounded-full transition-colors duration-500 ${hoveredIndex === index
-                    ? isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'
+                  <span className={`w-2 h-2 rounded-full transition-all duration-500 ${hoveredIndex === index
+                    ? isDark ? 'bg-[#2dd4bf] scale-110' : 'bg-[#0d9488] scale-110'
                     : isDark ? 'bg-[#3a3228]' : 'bg-[#d4c5b0]'
                   }`} />
                 </motion.div>
 
                 {/* Card */}
-                <div className={`relative p-4 sm:p-6 rounded-2xl border transition-all duration-500 ${isDark
-                  ? hoveredIndex === index ? 'border-[#d4a853]/25 bg-[#d4a853]/[0.04]' : 'border-white/5 bg-white/[0.015]'
-                  : hoveredIndex === index ? 'border-[#c47a4a]/25 bg-[#c47a4a]/[0.04]' : 'border-black/5 bg-black/[0.015]'
+                <div className={`relative p-4 sm:p-6 rounded-2xl border transition-all duration-500 hover-sweep card-glow-teal ${isDark
+                  ? hoveredIndex === index ? 'border-[#2dd4bf]/25 bg-[#2dd4bf]/[0.04] -translate-y-1' : 'border-white/5 bg-white/[0.015]'
+                  : hoveredIndex === index ? 'border-[#0d9488]/25 bg-[#0d9488]/[0.04] -translate-y-1' : 'border-black/5 bg-black/[0.015]'
                 }`}>
                   {/* Period pill */}
                   <div className="flex items-center justify-between mb-4">
@@ -146,7 +146,7 @@ export default function Education() {
                     </div>
                     <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold transition-all duration-500 ${
                       hoveredIndex === index
-                        ? isDark ? 'border-[#d4a853]/30 text-[#d4a853] bg-[#d4a853]/10' : 'border-[#c47a4a]/30 text-[#c47a4a] bg-[#c47a4a]/10'
+                        ? isDark ? 'border-[#2dd4bf]/30 text-[#2dd4bf] bg-[#2dd4bf]/10' : 'border-[#0d9488]/30 text-[#0d9488] bg-[#0d9488]/10'
                         : isDark ? 'border-white/8 text-[#a89f94]' : 'border-black/8 text-[#5c5449]'
                     }`}>
                       <Award className="w-3 h-3" />
@@ -155,7 +155,7 @@ export default function Education() {
                   </div>
 
                   <h3 className={`text-lg sm:text-xl font-bold tracking-tight mb-1 transition-colors duration-500 ${hoveredIndex === index
-                    ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                    ? isDark ? 'text-[#2dd4bf]' : 'text-[#0d9488]'
                     : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
                   }`}>
                     {edu.degree}

@@ -199,7 +199,7 @@ export default function About() {
                   transition={{ delay: 1, type: 'spring', bounce: 0.4 }}
                   whileHover={{ scale: 1.05, rotate: 0 }}
                 >
-                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse breathing-ring" />
                   <span className="text-xs font-bold tracking-wide">Available for Work</span>
                 </motion.div>
               </div>
@@ -271,11 +271,15 @@ export default function About() {
                       onMouseEnter={() => setHoveredTech(index)}
                       onMouseLeave={() => setHoveredTech(null)}
                       className={`relative text-lg font-medium cursor-default transition-all duration-500 pb-1 ${hoveredTech === index
-                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                        ? isDark ? 'text-[#d4a853] scale-105' : 'text-[#c47a4a] scale-105'
                         : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
                         }`}
                       whileHover={{ y: -3 }}
                     >
+                      <span className={`absolute -inset-x-3 -inset-y-1 rounded-full transition-all duration-500 -z-10 ${hoveredTech === index
+                        ? isDark ? 'bg-[#d4a853]/8 shadow-[0_0_12px_rgba(212,168,83,0.15)]' : 'bg-[#c47a4a]/8 shadow-[0_0_12px_rgba(196,122,74,0.1)]'
+                        : 'bg-transparent'
+                      }`} />
                       {tech}
                       {/* Underline on hover */}
                       <motion.span

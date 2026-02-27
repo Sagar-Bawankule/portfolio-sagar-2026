@@ -140,13 +140,13 @@ export default function Contact() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-8 pt-6 border-t border-current/5">
                   {contactInfo.map((info, idx) => (
                     <div key={idx} className="group cursor-default">
-                      <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-4 transition-colors ${isDark ? 'text-[#6b6259] group-hover:text-[#d4a853]' : 'text-[#8a8178] group-hover:text-[#c47a4a]'}`}>
+                      <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-4 transition-colors ${isDark ? 'text-[#6b6259] group-hover:text-[#c084fc]' : 'text-[#8a8178] group-hover:text-[#7c3aed]'}`}>
                         {info.title}
                       </p>
                       {info.href ? (
                         <a
                           href={info.href}
-                          className={`text-xl sm:text-2xl font-medium transition-colors hover:text-[#d4a853] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                          className={`text-xl sm:text-2xl font-medium transition-colors hover:text-[#c084fc] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                         >
                           {info.value}
                         </a>
@@ -172,11 +172,11 @@ export default function Contact() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`text-xl font-medium relative group transition-colors ${isDark ? 'text-[#a89f94] hover:text-[#d4a853]' : 'text-[#5c5449] hover:text-[#c47a4a]'}`}
-                      whileHover={{ y: -3 }}
+                      className={`text-xl font-medium relative group transition-colors ${isDark ? 'text-[#a89f94] hover:text-[#c084fc]' : 'text-[#5c5449] hover:text-[#7c3aed]'}`}
+                      whileHover={{ y: -3, scale: 1.05 }}
                     >
                       {social.name}
-                      <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-500 group-hover:w-full ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
+                      <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-500 group-hover:w-full ${isDark ? 'bg-[#c084fc]' : 'bg-[#7c3aed]'}`} />
                     </motion.a>
                   ))}
                 </div>
@@ -202,9 +202,9 @@ export default function Contact() {
                       onChange={handleInputChange}
                       required
                       placeholder="Your Name"
-                      className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 ${isDark
-                          ? 'border-[#a89f94]/20 focus:border-[#d4a853] text-[#f5f0eb]'
-                          : 'border-[#5c5449]/20 focus:border-[#c47a4a] text-[#1a1612]'
+                      className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
+                          ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
+                          : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
                         }`}
                     />
                     <label htmlFor="name" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.name
@@ -224,9 +224,9 @@ export default function Contact() {
                       onChange={handleInputChange}
                       required
                       placeholder="Email Address"
-                      className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 ${isDark
-                          ? 'border-[#a89f94]/20 focus:border-[#d4a853] text-[#f5f0eb]'
-                          : 'border-[#5c5449]/20 focus:border-[#c47a4a] text-[#1a1612]'
+                      className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
+                          ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
+                          : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
                         }`}
                     />
                     <label htmlFor="email" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.email
@@ -247,9 +247,9 @@ export default function Contact() {
                     onChange={handleInputChange}
                     required
                     placeholder="Subject"
-                    className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 ${isDark
-                        ? 'border-[#a89f94]/20 focus:border-[#d4a853] text-[#f5f0eb]'
-                        : 'border-[#5c5449]/20 focus:border-[#c47a4a] text-[#1a1612]'
+                    className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
+                        ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
+                        : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
                       }`}
                   />
                   <label htmlFor="subject" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.subject
@@ -269,9 +269,9 @@ export default function Contact() {
                     required
                     rows={4}
                     placeholder="Your Message"
-                    className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all resize-none placeholder-transparent focus:placeholder-opacity-0 ${isDark
-                        ? 'border-[#a89f94]/20 focus:border-[#d4a853] text-[#f5f0eb]'
-                        : 'border-[#5c5449]/20 focus:border-[#c47a4a] text-[#1a1612]'
+                    className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all resize-none placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
+                        ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
+                        : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
                       }`}
                   />
                   <label htmlFor="message" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.message
@@ -285,19 +285,19 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group relative flex items-center gap-4 text-2xl font-medium pt-4 outline-none"
+                  className={`group relative flex items-center gap-4 text-2xl font-medium pt-4 outline-none transition-all duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#c084fc]' : 'text-[#1a1612] hover:text-[#7c3aed]'}`}
                   whileHover={{ x: 10 }}
                 >
                   <span className="relative">
                     {isSubmitting ? 'Sending...' : 'Send Message'}
-                    <span className={`absolute bottom-0 left-0 w-full h-[1.5px] transition-all duration-500 scale-x-100 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
+                    <span className={`absolute bottom-0 left-0 w-full h-[1.5px] transition-all duration-500 scale-x-100 ${isDark ? 'bg-[#c084fc]' : 'bg-[#7c3aed]'}`} />
                   </span>
                   {!isSubmitting && (
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <ArrowUpRight className={`w-6 h-6 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`} />
+                      <ArrowUpRight className={`w-6 h-6 ${isDark ? 'text-[#c084fc]' : 'text-[#7c3aed]'}`} />
                     </motion.div>
                   )}
                 </motion.button>
