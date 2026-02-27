@@ -63,20 +63,44 @@ const Footer = () => {
 
         {/* Big editorial wordmark */}
         <motion.div
-          className="mb-20 overflow-hidden"
+          className="mb-14 overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className={`font-serif font-black leading-[0.85] tracking-[-0.03em] select-none
-            text-[clamp(3rem,12vw,11rem)]
-            bg-gradient-to-r from-[#d4a853] via-[#f0b429] to-[#c47a4a] bg-clip-text text-transparent`}>
-            Sagar Bawankule
+          {/* Single-line name: "SAGAR" outlined + "BAWANKULE" filled, scales to fit */}
+          <h2 className="whitespace-nowrap flex items-baseline gap-[0.12em] leading-none select-none overflow-hidden"
+            style={{ fontSize: 'clamp(2.4rem, 8.5vw, 10rem)' }}
+          >
+            <span
+              className="font-serif font-black tracking-[-0.03em]"
+              style={{
+                WebkitTextStroke: isDark ? '2px #d4a853' : '2px #c47a4a',
+                color: 'transparent',
+              }}
+            >
+              SAGAR
+            </span>
+            <span className={`font-sans font-black tracking-[-0.04em] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
+              ✦
+            </span>
+            <span
+              className="font-serif font-black tracking-[-0.03em]"
+              style={{
+                WebkitTextStroke: isDark ? '2px #d4a853' : '2px #c47a4a',
+                color: 'transparent',
+              }}
+            >
+              BAWANKULE
+            </span>
           </h2>
-          <p className={`mt-4 text-lg font-serif italic ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-            AI &amp; Software Developer
-          </p>
+          <div className={`flex items-center gap-4 mt-3`}>
+            <div className={`h-px w-12 ${isDark ? 'bg-[#d4a853]/30' : 'bg-[#c47a4a]/30'}`} />
+            <p className={`text-xs uppercase tracking-[0.35em] font-mono ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+              AI &amp; Software Developer
+            </p>
+          </div>
         </motion.div>
 
         {/* Main grid — nav links + info + socials */}

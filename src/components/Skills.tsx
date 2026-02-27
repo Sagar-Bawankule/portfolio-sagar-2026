@@ -212,21 +212,21 @@ const Skills = () => {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="skills"
     >
       {/* Section top divider */}
-      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#fbbf24]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#d97706]/22 to-transparent'}`} />
 
       {/* Ambient background */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
-          style={{ filter: 'blur(160px)' }}
+          className={`absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#fbbf24]/7' : 'bg-[#d97706]/5'}`}
+          style={{ filter: 'blur(130px)' }}
         />
         <div
-          className={`absolute bottom-1/4 left-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#c47a4a]/3' : 'bg-[#d4a853]/2'}`}
-          style={{ filter: 'blur(140px)' }}
+          className={`absolute bottom-1/4 left-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#f59e0b]/5' : 'bg-[#b45309]/4'}`}
+          style={{ filter: 'blur(110px)' }}
         />
       </div>
 
@@ -234,7 +234,7 @@ const Skills = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
-          <div className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="mb-8 sm:mb-10 lg:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -252,7 +252,7 @@ const Skills = () => {
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, delay: 0.05 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(3rem,12vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -459,7 +459,7 @@ const Skills = () => {
 
           {/* Currently Exploring — full-width ticker strip */}
           <motion.div
-            className="mt-24"
+            className="mt-14"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

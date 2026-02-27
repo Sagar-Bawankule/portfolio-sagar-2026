@@ -86,18 +86,22 @@ export default function About() {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden rounded-t-[2rem] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden rounded-t-[2rem] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="about"
     >
       {/* Subtle background */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-0 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
-          style={{ filter: 'blur(140px)' }}
+          className={`absolute top-0 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/8' : 'bg-[#d4a853]/5'}`}
+          style={{ filter: 'blur(120px)' }}
         />
         <div
-          className={`absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#c47a4a]/3' : 'bg-[#d4a853]/3'}`}
-          style={{ filter: 'blur(120px)' }}
+          className={`absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#c47a4a]/6' : 'bg-[#c47a4a]/4'}`}
+          style={{ filter: 'blur(100px)' }}
+        />
+        <div
+          className={`absolute top-1/2 left-1/3 w-[200px] h-[200px] rounded-full ${isDark ? 'bg-[#f0b429]/4' : 'bg-[#f0b429]/3'}`}
+          style={{ filter: 'blur(90px)' }}
         />
       </div>
 
@@ -105,7 +109,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="mb-8 sm:mb-10 lg:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -125,7 +129,7 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(3rem,12vw,11rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -134,11 +138,11 @@ export default function About() {
           </div>
 
           {/* Main Content Grid — Photo + Text */}
-          <div className="grid lg:grid-cols-12 gap-16 lg:gap-20 items-start">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
 
             {/* Left Column — Photo (editorial framing) */}
             <motion.div
-              className="lg:col-span-5"
+              className="lg:col-span-4"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -150,7 +154,7 @@ export default function About() {
                   {/* Gradient border top */}
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#d4a853] via-[#c47a4a] to-[#e8985a] z-10" />
 
-                  <div className="relative aspect-[3/4] w-full">
+                  <div className="relative aspect-[5/6] w-full">
                     <Image
                       src={aboutData.profileImage || "/profilephoto.webp"}
                       alt={`${aboutData.name} — ${aboutData.title}`}
@@ -203,7 +207,7 @@ export default function About() {
 
             {/* Right Column — Content (editorial typography) */}
             <motion.div
-              className="lg:col-span-7 space-y-12"
+              className="lg:col-span-8 space-y-8"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -217,7 +221,7 @@ export default function About() {
                 transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
                 <p
-                  className={`text-lg sm:text-xl lg:text-2xl leading-[1.7] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}
+                  className={`text-base sm:text-lg leading-[1.7] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}
                 >
                   {aboutData.introduction}
                 </p>
@@ -225,13 +229,13 @@ export default function About() {
 
               {/* Editorial Quote — full width, big italic serif */}
               <motion.div
-                className={`relative py-8 border-y ${isDark ? 'border-[#d4a853]/10' : 'border-[#c47a4a]/10'}`}
+                className={`relative py-5 border-y ${isDark ? 'border-[#d4a853]/10' : 'border-[#c47a4a]/10'}`}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.7, duration: 1 }}
               >
-                <p className={`font-serif italic text-3xl sm:text-4xl leading-[1.3] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
+                <p className={`font-serif italic text-xl sm:text-2xl leading-[1.3] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
                   &ldquo;{aboutData.quote}&rdquo;
                 </p>
                 <motion.div
@@ -244,7 +248,7 @@ export default function About() {
               {/* Core Technologies — editorial minimal style */}
               <div>
                 <motion.div
-                  className="flex items-center gap-4 mb-8"
+                  className="flex items-center gap-4 mb-5"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
@@ -290,7 +294,7 @@ export default function About() {
 
               {/* Bottom CTA line — editorial */}
               <motion.div
-                className={`flex items-center justify-between pt-8 border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}
+                className={`flex items-center justify-between pt-5 border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

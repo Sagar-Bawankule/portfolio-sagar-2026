@@ -42,17 +42,21 @@ export default function Internships() {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="internships"
     >
       {/* Section top divider */}
-      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#4ade80]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#16a34a]/20 to-transparent'}`} />
 
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute bottom-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#c47a4a]/4' : 'bg-[#d4a853]/3'}`}
-          style={{ filter: 'blur(140px)' }}
+          className={`absolute bottom-1/4 right-0 w-[380px] h-[380px] rounded-full ${isDark ? 'bg-[#4ade80]/7' : 'bg-[#16a34a]/5'}`}
+          style={{ filter: 'blur(120px)' }}
+        />
+        <div
+          className={`absolute top-1/4 left-0 w-[220px] h-[220px] rounded-full ${isDark ? 'bg-[#86efac]/4' : 'bg-[#22c55e]/3'}`}
+          style={{ filter: 'blur(100px)' }}
         />
       </div>
 
@@ -60,7 +64,7 @@ export default function Internships() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="mb-8 sm:mb-10 lg:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -79,7 +83,7 @@ export default function Internships() {
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(2.2rem,9vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  className={`font-serif font-black text-[clamp(2rem,7vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -112,14 +116,14 @@ export default function Internships() {
                   {internship.number}
                 </motion.span>
 
-                <div className="relative z-10 p-5 sm:p-8 lg:p-10">
+                <div className="relative z-10 p-4 sm:p-6 lg:p-8">
                   {/* Top row */}
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+                    <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                     <div>
                       <div className={`text-[10px] uppercase tracking-[0.35em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
                         {internship.type}
                       </div>
-                      <h3 className={`text-2xl sm:text-4xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
+                      <h3 className={`text-xl sm:text-2xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
                         ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
                         : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
                       }`}>
@@ -151,7 +155,7 @@ export default function Internships() {
                   </div>
 
                   {/* Divider */}
-                  <div className={`h-px mb-6 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
+                  <div className={`h-px mb-4 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
 
                   {/* Tech tags */}
                   <div className="flex flex-wrap gap-3 mb-4">
@@ -205,7 +209,7 @@ export default function Internships() {
 
           {/* Bottom editorial note */}
           <motion.div
-            className="mt-16 flex items-center justify-between"
+            className="mt-10 flex items-center justify-between"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

@@ -27,18 +27,30 @@ const iconMap: Record<string, any> = {
   Monitor,
 }
 
+// Per-project accent colors — cycles through the palette
+const PROJECT_COLORS = [
+  { dark: '#2dd4bf', light: '#0d9488', glow: 'rgba(45,212,191,0.06)' },  // teal
+  { dark: '#d4a853', light: '#c47a4a', glow: 'rgba(212,168,83,0.06)' },  // gold
+  { dark: '#c084fc', light: '#7c3aed', glow: 'rgba(192,132,252,0.06)' }, // violet
+  { dark: '#fb7185', light: '#e11d48', glow: 'rgba(251,113,133,0.06)' }, // rose
+  { dark: '#818cf8', light: '#4f46e5', glow: 'rgba(129,140,248,0.06)' }, // indigo
+  { dark: '#fbbf24', light: '#d97706', glow: 'rgba(251,191,36,0.06)' },  // amber
+]
+
 // — Scroll-driven featured project row —
 function FeaturedRow({
-  project, index, isDark, hoveredIndex, setHoveredIndex
+  project, index, isDark, hoveredIndex, setHoveredIndex, accentColor
 }: {
   project: Project
   index: number
   isDark: boolean
   hoveredIndex: number | null
   setHoveredIndex: (i: number | null) => void
+  accentColor: { dark: string; light: string; glow: string }
 }) {
   const IconComponent = project.icon ? (iconMap[project.icon] || Zap) : Zap
   const rowRef = useRef<HTMLDivElement>(null)
+  const accent = isDark ? accentColor.dark : accentColor.light
 
   const { scrollYProgress } = useScroll({
     target: rowRef,
@@ -66,23 +78,35 @@ function FeaturedRow({
   return (
     <motion.div
       ref={rowRef}
-      style={{ opacity: rowOpacity }}
+      style={{
+        opacity: rowOpacity,
+        borderColor: isHovered ? `${accent}33` : isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+      }}
       onMouseEnter={() => setHoveredIndex(index)}
       onMouseLeave={() => setHoveredIndex(null)}
       data-cursor="view"
-      className={`group relative overflow-hidden border-t transition-colors duration-500 ${isDark ? 'border-white/5 hover:border-[#d4a853]/20' : 'border-black/5 hover:border-[#c47a4a]/20'}`}
+      className="group relative overflow-hidden border-t transition-colors duration-500"
     >
-      <div className="py-10 sm:py-14 grid grid-cols-12 gap-6 lg:gap-10 items-start">
+      {/* Colored hover sweep background */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+        style={{ background: `linear-gradient(135deg, ${accentColor.glow} 0%, transparent 60%)` }}
+      />
+
+      <div className="py-6 sm:py-10 grid grid-cols-12 gap-6 lg:gap-10 items-start">
 
         {/* Number — scales up on scroll */}
         <motion.div
           className="col-span-1 hidden sm:block"
           style={{ scale: numScale, opacity: numOpacity }}
         >
-          <span className={`text-sm font-mono transition-colors duration-500 ${isHovered
-            ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-            : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
-          }`}>
+          <span
+            className="text-sm font-mono transition-colors duration-500"
+            style={{ color: isHovered ? accent : isDark ? '#6b6259' : '#8a8178' }}
+          >
             {String(index + 1).padStart(2, '0')}
           </span>
         </motion.div>
@@ -93,15 +117,27 @@ function FeaturedRow({
           style={{ x: titleX, opacity: titleOpacity }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${isHovered
-              ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-              : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-            }`}>
+            <h3
+              className="text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500"
+              style={{ color: isHovered ? accent : isDark ? '#f5f0eb' : '#1a1612' }}
+            >
               {project.title}
             </h3>
             {project.status && (
-              <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-widest flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+              <span
+                className="text-[10px] font-mono uppercase tracking-widest flex items-center gap-1.5 px-2 py-0.5 rounded-full border"
+                style={{
+                  color: accent,
+                  borderColor: `${accent}40`,
+                  backgroundColor: `${accent}10`,
+                  boxShadow: isHovered ? `0 0 10px ${accent}30` : 'none',
+                  transition: 'box-shadow 0.4s ease',
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full animate-pulse"
+                  style={{ backgroundColor: accent }}
+                />
                 {project.status}
               </span>
             )}
@@ -116,7 +152,7 @@ function FeaturedRow({
           className="col-span-12 sm:col-span-4"
           style={{ x: stackX, opacity: stackOpacity }}
         >
-          <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+          <p className="text-[10px] uppercase tracking-[0.3em] font-mono mb-3" style={{ color: accent }}>
             Stack
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -188,7 +224,8 @@ function FeaturedRow({
 
       {/* Hover bottom line */}
       <motion.div
-        className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
+        className="absolute bottom-0 left-0 h-[1px]"
+        style={{ backgroundColor: accent }}
         initial={{ width: 0 }}
         animate={{ width: isHovered ? '100%' : 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -245,17 +282,21 @@ const Projects = () => {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
+      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
       id="projects"
     >
       {/* Section top divider */}
-      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#818cf8]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#4f46e5]/22 to-transparent'}`} />
 
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
-          style={{ filter: 'blur(140px)' }}
+          className={`absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#818cf8]/8' : 'bg-[#4f46e5]/5'}`}
+          style={{ filter: 'blur(120px)' }}
+        />
+        <div
+          className={`absolute bottom-0 left-1/4 w-[250px] h-[250px] rounded-full ${isDark ? 'bg-[#6366f1]/5' : 'bg-[#6366f1]/3'}`}
+          style={{ filter: 'blur(100px)' }}
         />
       </div>
 
@@ -263,7 +304,7 @@ const Projects = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="mb-8 sm:mb-10 lg:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -282,7 +323,7 @@ const Projects = () => {
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(3rem,12vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -291,7 +332,7 @@ const Projects = () => {
           </div>
 
           {/* Featured Projects — Scroll-driven rows */}
-          <div className="space-y-0 mb-24">
+          <div className="space-y-0 mb-16">
             {featuredProjects.map((project, index) => (
               <FeaturedRow
                 key={project._id}
@@ -300,6 +341,7 @@ const Projects = () => {
                 isDark={isDark}
                 hoveredIndex={hoveredIndex}
                 setHoveredIndex={setHoveredIndex}
+                accentColor={PROJECT_COLORS[index % PROJECT_COLORS.length]}
               />
             ))}
             <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
@@ -309,7 +351,7 @@ const Projects = () => {
           {otherProjects.length > 0 && (
             <div>
               <motion.div
-                className="flex items-center gap-4 mb-12"
+                className="flex items-center gap-4 mb-8"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}

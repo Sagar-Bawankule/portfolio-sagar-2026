@@ -69,17 +69,25 @@ export default function Contact() {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="contact"
     >
       {/* Section top divider */}
-      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#c084fc]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#7c3aed]/22 to-transparent'}`} />
 
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
-          style={{ filter: 'blur(150px)' }}
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full ${isDark ? 'bg-[#c084fc]/8' : 'bg-[#7c3aed]/5'}`}
+          style={{ filter: 'blur(120px)' }}
+        />
+        <div
+          className={`absolute top-0 right-0 w-[220px] h-[220px] rounded-full ${isDark ? 'bg-[#a78bfa]/5' : 'bg-[#6d28d9]/4'}`}
+          style={{ filter: 'blur(100px)' }}
+        />
+        <div
+          className={`absolute bottom-0 left-0 w-[200px] h-[200px] rounded-full ${isDark ? 'bg-[#818cf8]/4' : 'bg-[#4f46e5]/3'}`}
+          style={{ filter: 'blur(90px)' }}
         />
       </div>
 
@@ -87,7 +95,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-14 sm:mb-20 lg:mb-24">
+          <div className="mb-8 sm:mb-10 lg:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -106,7 +114,7 @@ export default function Contact() {
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(3rem,12vw,13rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -114,22 +122,22 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-16 items-start">
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
 
             {/* Left Column — Contact Info & Socials */}
             <motion.div
-              className="lg:col-span-12 xl:col-span-5 space-y-16"
+              className="lg:col-span-12 xl:col-span-5 space-y-10"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.5 }}
             >
               <div className="space-y-10">
-                <p className={`text-2xl sm:text-3xl leading-[1.4] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                <p className={`text-xl sm:text-2xl leading-[1.4] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
                   Have a vision for a project? Need an AI specialist? Or just want to talk tech? <span className={`font-serif italic ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>My inbox is always open.</span>
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-12 pt-8 border-t border-current/5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-8 pt-6 border-t border-current/5">
                   {contactInfo.map((info, idx) => (
                     <div key={idx} className="group cursor-default">
                       <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-4 transition-colors ${isDark ? 'text-[#6b6259] group-hover:text-[#d4a853]' : 'text-[#8a8178] group-hover:text-[#c47a4a]'}`}>
@@ -153,8 +161,8 @@ export default function Contact() {
               </div>
 
               {/* Social Links Editorial Style */}
-              <div className="pt-12 border-t border-current/5">
-                <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-8 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+              <div className="pt-8 border-t border-current/5">
+                <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-5 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
                   Digital Spaces
                 </p>
                 <div className="flex flex-wrap gap-x-12 gap-y-6">
@@ -183,8 +191,8 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.7 }}
             >
-              <form onSubmit={handleSubmit} className="space-y-12">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div className="relative group">
                     <input
                       type="text"

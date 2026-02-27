@@ -57,17 +57,21 @@ const Certifications = () => {
 
   return (
     <section
-      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
+      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
       id="certifications"
     >
       {/* Section top divider */}
-      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#d4a853]/20 to-transparent' : 'bg-gradient-to-r from-transparent via-[#c47a4a]/15 to-transparent'}`} />
+      <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-[#fb7185]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#e11d48]/20 to-transparent'}`} />
 
       {/* Ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-1/3 right-1/4 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
-          style={{ filter: 'blur(160px)' }}
+          className={`absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full ${isDark ? 'bg-[#fb7185]/7' : 'bg-[#f43f5e]/5'}`}
+          style={{ filter: 'blur(130px)' }}
+        />
+        <div
+          className={`absolute bottom-0 left-0 w-[220px] h-[220px] rounded-full ${isDark ? 'bg-[#f472b6]/5' : 'bg-[#ec4899]/3'}`}
+          style={{ filter: 'blur(100px)' }}
         />
       </div>
 
@@ -75,7 +79,7 @@ const Certifications = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
-          <div className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="mb-8 sm:mb-10 lg:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -94,7 +98,7 @@ const Certifications = () => {
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, delay: 0.03 + i * 0.045, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(1.8rem,6vw,9rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  className={`font-serif font-black text-[clamp(1.6rem,5vw,6rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter === ' ' ? '\u00A0' : letter}
                 </motion.span>
@@ -251,7 +255,7 @@ const Certifications = () => {
 
           {/* Footer stat row */}
           <motion.div
-            className="mt-16 flex flex-wrap items-center justify-between gap-6"
+            className="mt-10 flex flex-wrap items-center justify-between gap-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
