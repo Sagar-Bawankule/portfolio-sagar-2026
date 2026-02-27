@@ -30,10 +30,9 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
             >
                 {/* Ambient glow */}
                 <div className="absolute inset-0">
-                    <motion.div
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[200px] bg-[#d4a853]/8"
-                        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 3, ease: 'easeInOut' }}
+                    <div
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#d4a853]/8"
+                        style={{ filter: 'blur(150px)' }}
                     />
                 </div>
 
@@ -59,7 +58,7 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
                             initial={{ y: '110%', rotateX: -15 }}
                             animate={
                                 phase === 'exit'
-                                    ? { y: '-20%', scale: 0.4, opacity: 0, filter: 'blur(8px)' }
+                                    ? { y: '-20%', scale: 0.6, opacity: 0 }
                                     : { y: '0%', rotateX: 0 }
                             }
                             transition={{

@@ -195,40 +195,35 @@ const Skills = () => {
   // Slide variants: direction-aware
   const panelVariants = {
     enter: (dir: number) => ({
-      y: dir > 0 ? 40 : -40,
+      y: dir > 0 ? 30 : -30,
       opacity: 0,
-      filter: 'blur(8px)',
     }),
     center: {
       y: 0,
       opacity: 1,
-      filter: 'blur(0px)',
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
     },
     exit: (dir: number) => ({
-      y: dir > 0 ? -40 : 40,
+      y: dir > 0 ? -30 : 30,
       opacity: 0,
-      filter: 'blur(8px)',
-      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
     }),
   }
 
   return (
     <section
-      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="skills"
     >
       {/* Ambient background */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className={`absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full blur-[180px] ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
-          animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className={`absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
+          style={{ filter: 'blur(160px)' }}
         />
-        <motion.div
-          className={`absolute bottom-1/4 left-0 w-[400px] h-[400px] rounded-full blur-[160px] ${isDark ? 'bg-[#c47a4a]/3' : 'bg-[#d4a853]/2'}`}
-          animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className={`absolute bottom-1/4 left-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#c47a4a]/3' : 'bg-[#d4a853]/2'}`}
+          style={{ filter: 'blur(140px)' }}
         />
       </div>
 
@@ -236,7 +231,7 @@ const Skills = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
-          <div className="mb-20">
+          <div className="mb-12 sm:mb-16 lg:mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -250,11 +245,11 @@ const Skills = () => {
               {"SKILLS".split('').map((letter, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 60, rotateX: -25 }}
+                  initial={{ opacity: 0, y: 40, rotateX: -20 }}
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1.1, delay: 0.05 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(4rem,13vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  transition={{ duration: 0.9, delay: 0.05 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(3rem,12vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -266,7 +261,9 @@ const Skills = () => {
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
 
             {/* --- LEFT: Category tab list --- */}
-            <div className="lg:w-64 shrink-0 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+            <div className="lg:w-64 shrink-0 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-1 px-1 scrollbar-none"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+            >
               {skillCategories.map((cat, i) => {
                 const Icon = iconMap[cat.icon] || Code2
                 const isActive = activeCategory === i

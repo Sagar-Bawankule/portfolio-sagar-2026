@@ -57,15 +57,14 @@ const Certifications = () => {
 
   return (
     <section
-      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="certifications"
     >
       {/* Ambient */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className={`absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[180px] ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
-          animate={{ x: [0, 20, 0], y: [0, -25, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className={`absolute top-1/3 right-1/4 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/3' : 'bg-[#c47a4a]/2'}`}
+          style={{ filter: 'blur(160px)' }}
         />
       </div>
 
@@ -73,7 +72,7 @@ const Certifications = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
-          <div className="mb-20">
+          <div className="mb-12 sm:mb-16 lg:mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -88,11 +87,11 @@ const Certifications = () => {
               {"CERTIFICATES".split('').map((letter, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 60, rotateX: -25 }}
+                  initial={{ opacity: 0, y: 40, rotateX: -20 }}
                   whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1.1, delay: 0.03 + i * 0.045, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(2rem,7vw,9rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  transition={{ duration: 0.9, delay: 0.03 + i * 0.045, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(1.8rem,6vw,9rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter === ' ' ? '\u00A0' : letter}
                 </motion.span>

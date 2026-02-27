@@ -13,11 +13,11 @@ const CustomCursor = () => {
   const [label, setLabel] = useState<string | null>(null)
 
   // Tight spring for dot
-  const dotX = useSpring(0, { damping: 30, stiffness: 400, mass: 0.4 })
-  const dotY = useSpring(0, { damping: 30, stiffness: 400, mass: 0.4 })
-  // Looser spring for outer blob (trails behind for magnetic feel)
-  const blobX = useSpring(0, { damping: 18, stiffness: 150, mass: 1.2 })
-  const blobY = useSpring(0, { damping: 18, stiffness: 150, mass: 1.2 })
+  const dotX = useSpring(0, { damping: 35, stiffness: 450, mass: 0.3 })
+  const dotY = useSpring(0, { damping: 35, stiffness: 450, mass: 0.3 })
+  // Looser spring for outer blob
+  const blobX = useSpring(0, { damping: 22, stiffness: 180, mass: 0.8 })
+  const blobY = useSpring(0, { damping: 22, stiffness: 180, mass: 0.8 })
 
   useEffect(() => {
     const checkMobile = () => {
@@ -156,22 +156,6 @@ const CustomCursor = () => {
           )}
         </AnimatePresence>
       </motion.div>
-
-      {/* ── Trailing glow halo — very slow, atmospheric ── */}
-      <motion.div
-        className="fixed top-0 left-0 z-[9997] pointer-events-none rounded-full"
-        style={{
-          x: blobX,
-          y: blobY,
-          translateX: '-50%',
-          translateY: '-50%',
-          width: 120,
-          height: 120,
-          background: `radial-gradient(circle, ${gold}18 0%, transparent 70%)`,
-        }}
-        animate={{ opacity: isVisible && (cursorState === 'project' || cursorState === 'link' || cursorState === 'hover') ? 1 : 0 }}
-        transition={{ duration: 0.5 }}
-      />
     </>
   )
 }

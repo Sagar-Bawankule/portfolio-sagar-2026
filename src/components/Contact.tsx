@@ -69,15 +69,14 @@ export default function Contact() {
 
   return (
     <section
-      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="contact"
     >
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[160px] ${isDark ? 'bg-[#d4a853]/5' : 'bg-[#c47a4a]/3'}`}
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
+          style={{ filter: 'blur(150px)' }}
         />
       </div>
 
@@ -85,7 +84,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-24">
+          <div className="mb-14 sm:mb-20 lg:mb-24">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -100,11 +99,11 @@ export default function Contact() {
               {sectionHeading.split('').map((letter, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 40, rotateX: -30, filter: 'blur(10px)' }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(4.5rem,14vw,13rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  transition={{ duration: 0.8, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(3rem,12vw,13rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>

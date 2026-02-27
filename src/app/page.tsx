@@ -14,7 +14,6 @@ import Footer from '@/components/Footer'
 import CustomCursor from '@/components/CustomCursor'
 import ScrollProgress from '@/components/ScrollProgress'
 import IntroAnimation from '@/components/IntroAnimation'
-import Marquee from '@/components/Marquee'
 
 export default function Home() {
   const [introComplete, setIntroComplete] = useState(false)
@@ -44,13 +43,10 @@ export default function Home() {
 
         {/* Content slides up over the sticky Hero — negative margin pulls it up flush */}
         <div className="relative z-10 -mt-[100vh]">
-          <Marquee />
           <About />
           <Education />
-          <Marquee />
           <Internships />
           <Projects />
-          <Marquee />
           <Skills />
           <Certifications />
           <Contact />

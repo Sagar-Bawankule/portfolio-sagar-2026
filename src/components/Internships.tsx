@@ -42,15 +42,14 @@ export default function Internships() {
 
   return (
     <section
-      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="internships"
     >
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className={`absolute bottom-1/4 right-0 w-[500px] h-[500px] rounded-full blur-[150px] ${isDark ? 'bg-[#c47a4a]/4' : 'bg-[#d4a853]/3'}`}
-          animate={{ x: [0, -20, 0], y: [0, 15, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className={`absolute bottom-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#c47a4a]/4' : 'bg-[#d4a853]/3'}`}
+          style={{ filter: 'blur(140px)' }}
         />
       </div>
 
@@ -58,7 +57,7 @@ export default function Internships() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-20">
+          <div className="mb-12 sm:mb-16 lg:mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -73,11 +72,11 @@ export default function Internships() {
               {"EXPERIENCE".split('').map((letter, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 40, rotateX: -30, filter: 'blur(10px)' }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(4rem,13vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  transition={{ duration: 0.8, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(2.2rem,9vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
@@ -104,13 +103,13 @@ export default function Internships() {
               >
                 {/* Ghost large number watermark */}
                 <motion.span
-                  className={`absolute -right-4 -bottom-4 text-[10rem] sm:text-[14rem] font-black font-serif pointer-events-none select-none leading-none transition-all duration-700 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}
+                  className={`absolute -right-4 -bottom-4 text-[7rem] sm:text-[10rem] lg:text-[14rem] font-black font-serif pointer-events-none select-none leading-none transition-all duration-700 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}
                   animate={{ opacity: hoveredIndex === index ? 0.07 : 0.03 }}
                 >
                   {internship.number}
                 </motion.span>
 
-                <div className="relative z-10 p-8 sm:p-10">
+                <div className="relative z-10 p-5 sm:p-8 lg:p-10">
                   {/* Top row */}
                   <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                     <div>

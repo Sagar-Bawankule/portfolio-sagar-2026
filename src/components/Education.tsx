@@ -46,15 +46,14 @@ export default function Education() {
 
   return (
     <section
-      className={`relative py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-20 sm:py-28 lg:py-32 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="education"
     >
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className={`absolute top-1/3 left-0 w-[400px] h-[400px] rounded-full blur-[140px] ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
-          animate={{ x: [0, 15, 0], y: [0, -10, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className={`absolute top-1/3 left-0 w-[350px] h-[350px] rounded-full ${isDark ? 'bg-[#d4a853]/4' : 'bg-[#c47a4a]/3'}`}
+          style={{ filter: 'blur(130px)' }}
         />
       </div>
 
@@ -62,7 +61,7 @@ export default function Education() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-20">
+          <div className="mb-12 sm:mb-16 lg:mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -77,11 +76,11 @@ export default function Education() {
               {sectionHeading.split('').map((letter, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 40, rotateX: -30, filter: 'blur(10px)' }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(4rem,13vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                  transition={{ duration: 0.8, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-serif font-black text-[clamp(3rem,12vw,12rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                 >
                   {letter}
                 </motion.span>
