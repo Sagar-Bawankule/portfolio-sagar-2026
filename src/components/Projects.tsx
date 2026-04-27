@@ -1,8 +1,8 @@
 'use client'
 
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ExternalLink, Github, Brain, Leaf, Zap, Monitor, ArrowUpRight } from 'lucide-react'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useTheme } from '@/context/ThemeContext'
 
@@ -27,7 +27,7 @@ const iconMap: Record<string, any> = {
   Monitor,
 }
 
-// — Scroll-driven featured project row —
+// — Simple whileInView featured project row (no per-row scroll listeners) —
 function FeaturedRow({
   project, index, isDark, hoveredIndex, setHoveredIndex
 }: {
@@ -38,62 +38,35 @@ function FeaturedRow({
   setHoveredIndex: (i: number | null) => void
 }) {
   const IconComponent = project.icon ? (iconMap[project.icon] || Zap) : Zap
-  const rowRef = useRef<HTMLDivElement>(null)
-
-  const { scrollYProgress } = useScroll({
-    target: rowRef,
-    offset: ['start 0.9', 'start 0.2'],
-  })
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 55, damping: 22, mass: 0.5 })
-
-  // Title slides in from left
-  const titleX = useTransform(smoothProgress, [0, 1], [-60, 0])
-  const titleOpacity = useTransform(smoothProgress, [0, 0.5], [0, 1])
-
-  // Stack slides in from right
-  const stackX = useTransform(smoothProgress, [0, 1], [60, 0])
-  const stackOpacity = useTransform(smoothProgress, [0, 0.5], [0, 1])
-
-  // Number scales up from tiny
-  const numScale = useTransform(smoothProgress, [0, 1], [0.3, 1])
-  const numOpacity = useTransform(smoothProgress, [0, 0.6], [0, 1])
-
-  // Row itself fades in
-  const rowOpacity = useTransform(smoothProgress, [0, 0.3], [0, 1])
-
   const isHovered = hoveredIndex === index
 
   return (
     <motion.div
-      ref={rowRef}
-      style={{ opacity: rowOpacity }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={() => setHoveredIndex(index)}
       onMouseLeave={() => setHoveredIndex(null)}
       data-cursor="view"
-      className={`group relative overflow-hidden border-t transition-all duration-500 ${isDark ? 'border-white/5 hover:border-[#818cf8]/20' : 'border-black/5 hover:border-[#4f46e5]/20'}`}
+      className={`group relative overflow-hidden border-t transition-all duration-500 ${isDark ? 'border-white/10 hover:border-[#818cf8]/25' : 'border-black/8 hover:border-[#4f46e5]/25'}`}
     >
-      <div className="py-6 sm:py-10 grid grid-cols-12 gap-6 lg:gap-10 items-start">
+      <div className="py-4 sm:py-6 grid grid-cols-12 gap-4 lg:gap-8 items-start">
 
-        {/* Number — scales up on scroll */}
-        <motion.div
-          className="col-span-1 hidden sm:block"
-          style={{ scale: numScale, opacity: numOpacity }}
-        >
+        {/* Number */}
+        <div className="col-span-1 hidden sm:block">
           <span className={`text-sm font-mono transition-colors duration-500 ${isHovered
             ? isDark ? 'text-[#818cf8]' : 'text-[#4f46e5]'
             : isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'
           }`}>
             {String(index + 1).padStart(2, '0')}
           </span>
-        </motion.div>
+        </div>
 
-        {/* Title & Description — slides from left */}
-        <motion.div
-          className="col-span-12 sm:col-span-5"
-          style={{ x: titleX, opacity: titleOpacity }}
-        >
+        {/* Title & Description */}
+        <div className="col-span-12 sm:col-span-5">
           <div className="flex items-center gap-3 mb-3">
-            <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500 ${isHovered
+            <h3 className={`text-xl sm:text-2xl font-bold tracking-tight transition-colors duration-500 ${isHovered
               ? isDark ? 'text-[#818cf8]' : 'text-[#4f46e5]'
               : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
             }`}>
@@ -106,16 +79,13 @@ function FeaturedRow({
               </span>
             )}
           </div>
-          <p className={`text-base font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+          <p className={`text-sm font-light leading-relaxed ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
             {project.description}
           </p>
-        </motion.div>
+        </div>
 
-        {/* Technologies — slides from right */}
-        <motion.div
-          className="col-span-12 sm:col-span-4"
-          style={{ x: stackX, opacity: stackOpacity }}
-        >
+        {/* Technologies */}
+        <div className="col-span-12 sm:col-span-4">
           <p className={`text-[10px] uppercase tracking-[0.3em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
             Stack
           </p>
@@ -129,53 +99,45 @@ function FeaturedRow({
               </span>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Links */}
-        <motion.div
-          className="col-span-12 sm:col-span-2 flex sm:flex-col sm:items-end gap-4 relative z-20"
-          style={{ opacity: titleOpacity }}
-        >
+        <div className="col-span-12 sm:col-span-2 flex sm:flex-col sm:items-end gap-4 relative z-20">
           {project.githubUrl && (
-            <motion.a
+            <a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#d4a853]' : 'text-[#5c5449] hover:text-[#c47a4a]'}`}
-              whileHover={{ x: 3 }}
             >
               <span className="relative pb-0.5">
                 Code
                 <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#6b6259]/30' : 'bg-[#8a8178]/30'}`} />
               </span>
               <Github className="w-4 h-4" />
-            </motion.a>
+            </a>
           )}
           {project.liveUrl && (
-            <motion.a
+            <a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={`group/link inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#d4a853]' : 'text-[#1a1612] hover:text-[#c47a4a]'}`}
-              whileHover={{ x: 3 }}
             >
               <span className="relative pb-0.5">
                 Live
                 <span className={`absolute bottom-0 left-0 w-full h-px ${isDark ? 'bg-[#d4a853]/40' : 'bg-[#c47a4a]/40'}`} />
               </span>
               <ArrowUpRight className="w-4 h-4" />
-            </motion.a>
+            </a>
           )}
-        </motion.div>
+        </div>
       </div>
 
-      {/* Hover image reveal */}
+      {/* Hover image reveal — CSS transition only */}
       {project.image && (
-        <motion.div
-          className="absolute top-0 right-4 h-full w-56 sm:w-72 pointer-events-none z-10"
-          initial={{ x: '110%', opacity: 0 }}
-          animate={{ x: isHovered ? '0%' : '110%', opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        <div
+          className={`absolute top-0 right-4 h-full w-56 sm:w-72 pointer-events-none z-10 transition-all duration-500 ease-out ${isHovered ? 'translate-x-0 opacity-100' : 'translate-x-[110%] opacity-0'}`}
         >
           <div className="relative h-full w-full">
             <Image src={project.image} alt={project.title} fill className="object-cover" sizes="288px" />
@@ -183,15 +145,12 @@ function FeaturedRow({
             <div className={`absolute inset-y-0 right-0 w-16 bg-gradient-to-l ${isDark ? 'from-[#080604]' : 'from-[#faf8f5]'} to-transparent`} />
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#818cf8]/60 to-transparent" />
           </div>
-        </motion.div>
+        </div>
       )}
 
-      {/* Hover bottom line */}
-      <motion.div
-        className={`absolute bottom-0 left-0 h-[1px] ${isDark ? 'bg-[#818cf8]' : 'bg-[#4f46e5]'}`}
-        initial={{ width: 0 }}
-        animate={{ width: isHovered ? '100%' : 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      {/* Hover bottom line — CSS only */}
+      <div
+        className={`absolute bottom-0 left-0 h-[1px] transition-all duration-500 ease-out ${isDark ? 'bg-[#818cf8]' : 'bg-[#4f46e5]'} ${isHovered ? 'w-full' : 'w-0'}`}
       />
     </motion.div>
   )
@@ -203,7 +162,6 @@ const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
-  const rowRef = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -245,7 +203,7 @@ const Projects = () => {
 
   return (
     <section
-      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
+      className={`relative py-8 sm:py-10 lg:py-14 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
       id="projects"
     >
       {/* Section top divider */}
@@ -255,11 +213,11 @@ const Projects = () => {
       <div className="absolute inset-0 pointer-events-none">
         <div
           className={`absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#818cf8]/8' : 'bg-[#4f46e5]/5'}`}
-          style={{ filter: 'blur(120px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
         <div
           className={`absolute bottom-0 left-1/4 w-[250px] h-[250px] rounded-full ${isDark ? 'bg-[#6366f1]/5' : 'bg-[#6366f1]/3'}`}
-          style={{ filter: 'blur(100px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
       </div>
 
@@ -267,7 +225,7 @@ const Projects = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-8 sm:mb-10 lg:mb-14">
+          <div className="mb-5 sm:mb-6 lg:mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -278,24 +236,19 @@ const Projects = () => {
               <span className="section-label">04 &mdash; selected work</span>
             </motion.div>
 
-            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
-              {"PROJECTS".split('').map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`font-serif font-black text-[clamp(1.8rem,5vw,4.5rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+            >
+              PROJECTS
+            </motion.h2>
           </div>
 
           {/* Featured Projects — Scroll-driven rows */}
-          <div className="space-y-0 mb-16">
+          <div className="space-y-0 mb-8">
             {featuredProjects.map((project, index) => (
               <FeaturedRow
                 key={project._id}
@@ -306,7 +259,7 @@ const Projects = () => {
                 setHoveredIndex={setHoveredIndex}
               />
             ))}
-            <div className={`border-t ${isDark ? 'border-white/5' : 'border-black/5'}`} />
+            <div className={`border-t ${isDark ? 'border-white/10' : 'border-black/8'}`} />
           </div>
 
           {/* Other Projects — Compact Grid */}
@@ -325,19 +278,17 @@ const Projects = () => {
                 <div className={`h-px flex-1 ${isDark ? 'bg-[#d4a853]/10' : 'bg-[#c47a4a]/10'}`} />
               </motion.div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {otherProjects.map((project, index) => (
                   <motion.div
                     key={project._id}
-                    initial={{ opacity: 0, y: 30, rotateX: 10 }}
-                    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
                     transition={{ duration: 0.75, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    style={{ transformPerspective: 800 }}
-                    whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-                    className={`group relative p-6 rounded-xl border transition-colors duration-500 hover-sweep card-glow-indigo ${isDark
-                      ? 'border-white/5 hover:border-[#818cf8]/25 bg-white/[0.01] hover:bg-white/[0.03]'
-                      : 'border-black/5 hover:border-[#4f46e5]/25 bg-black/[0.01] hover:bg-black/[0.03]'
+                    className={`group relative p-4 rounded-xl border transition-all duration-300 card-glow-indigo ${isDark
+                      ? 'border-white/10 hover:border-[#818cf8]/30 bg-white/[0.04] hover:bg-white/[0.07]'
+                      : 'border-black/8 hover:border-[#4f46e5]/30 bg-black/[0.03] hover:bg-black/[0.05]'
                     }`}
                   >
                     {/* Animated gold top border on hover */}
@@ -371,20 +322,18 @@ const Projects = () => {
                     </div>
                     <div className="flex gap-4">
                       {project.githubUrl && (
-                        <motion.a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
-                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#818cf8]' : 'text-[#8a8178] hover:text-[#4f46e5]'}`}
-                          whileHover={{ scale: 1.2 }}
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+                          className={`text-xs transition-colors duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#818cf8]' : 'text-[#8a8178] hover:text-[#4f46e5]'}`}
                         >
                           <Github className="w-4 h-4" />
-                        </motion.a>
+                        </a>
                       )}
                       {project.liveUrl && (
-                        <motion.a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-                          className={`text-xs transition-colors ${isDark ? 'text-[#6b6259] hover:text-[#818cf8]' : 'text-[#8a8178] hover:text-[#4f46e5]'}`}
-                          whileHover={{ scale: 1.2, rotate: -10 }}
+                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+                          className={`text-xs transition-colors duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#818cf8]' : 'text-[#8a8178] hover:text-[#4f46e5]'}`}
                         >
                           <ArrowUpRight className="w-4 h-4" />
-                        </motion.a>
+                        </a>
                       )}
                     </div>
                   </motion.div>

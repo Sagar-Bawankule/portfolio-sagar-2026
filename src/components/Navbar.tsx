@@ -24,19 +24,25 @@ const Navbar = () => {
   const isDark = theme === 'dark'
 
   useEffect(() => {
+    let ticking = false
     const onScroll = () => {
-      setScrolled(window.scrollY > 40)
-      const scrollPos = window.scrollY + 120
-      for (let i = navItems.length - 1; i >= 0; i--) {
-        const id = navItems[i].href.substring(1)
-        const el = document.getElementById(id)
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(id)
-          break
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40)
+        const scrollPos = window.scrollY + 120
+        for (let i = navItems.length - 1; i >= 0; i--) {
+          const id = navItems[i].href.substring(1)
+          const el = document.getElementById(id)
+          if (el && el.offsetTop <= scrollPos) {
+            setActiveSection(id)
+            break
+          }
         }
-      }
+        ticking = false
+      })
     }
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 

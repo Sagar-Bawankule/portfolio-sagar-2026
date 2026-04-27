@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calendar, Award, ArrowUpRight, Briefcase } from 'lucide-react'
+import { Calendar, Award, ArrowUpRight } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
 import { useState } from 'react'
 
@@ -36,13 +36,12 @@ export default function Internships() {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
 
   const sectionHeading = "INTERNSHIPS"
 
   return (
     <section
-      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-8 sm:py-10 lg:py-14 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="internships"
     >
       {/* Section top divider */}
@@ -52,11 +51,11 @@ export default function Internships() {
       <div className="absolute inset-0 pointer-events-none">
         <div
           className={`absolute bottom-1/4 right-0 w-[380px] h-[380px] rounded-full ${isDark ? 'bg-[#4ade80]/7' : 'bg-[#16a34a]/5'}`}
-          style={{ filter: 'blur(120px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
         <div
           className={`absolute top-1/4 left-0 w-[220px] h-[220px] rounded-full ${isDark ? 'bg-[#86efac]/4' : 'bg-[#22c55e]/3'}`}
-          style={{ filter: 'blur(100px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
       </div>
 
@@ -64,7 +63,7 @@ export default function Internships() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-8 sm:mb-10 lg:mb-14">
+          <div className="mb-5 sm:mb-6 lg:mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -75,133 +74,97 @@ export default function Internships() {
               <span className="section-label">03 &mdash; professional experience</span>
             </motion.div>
 
-            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
-              {"EXPERIENCE".split('').map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(2rem,7vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`font-serif font-black text-[clamp(1.8rem,5vw,4.5rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+            >
+              EXPERIENCE
+            </motion.h2>
           </div>
 
-          {/* Internship Entries — Full-width cards with ghost watermark */}
-          <div className="space-y-6">
+          {/* Internship Entries — Side-by-side compact cards */}
+          <div className="grid sm:grid-cols-2 gap-4 lg:gap-5">
             {internships.map((internship, index) => (
               <motion.div
                 key={internship.id}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.9, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.7, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-500 hover-sweep card-glow-emerald ${isDark
-                  ? hoveredIndex === index ? 'border-[#4ade80]/30 bg-[#4ade80]/[0.04] -translate-y-1' : 'border-white/5 bg-white/[0.015]'
-                  : hoveredIndex === index ? 'border-[#16a34a]/30 bg-[#16a34a]/[0.04] -translate-y-1' : 'border-black/5 bg-black/[0.015]'
+                className={`group relative overflow-hidden rounded-xl border transition-all duration-500 hover-sweep card-glow-emerald backdrop-blur-sm ${isDark
+                  ? hoveredIndex === index ? 'border-[#4ade80]/35 bg-[#4ade80]/[0.08] -translate-y-1' : 'border-white/10 bg-white/[0.04]'
+                  : hoveredIndex === index ? 'border-[#16a34a]/35 bg-[#16a34a]/[0.06] -translate-y-1' : 'border-black/8 bg-black/[0.03]'
                 }`}
-                onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
               >
-                {/* Ghost large number watermark */}
-                <motion.span
-                  className={`absolute -right-4 -bottom-4 text-[7rem] sm:text-[10rem] lg:text-[14rem] font-black font-serif pointer-events-none select-none leading-none transition-all duration-700 ${isDark ? 'text-[#4ade80]' : 'text-[#16a34a]'}`}
-                  animate={{ opacity: hoveredIndex === index ? 0.07 : 0.03 }}
-                >
-                  {internship.number}
-                </motion.span>
+                <div className="relative z-10 p-4 sm:p-5">
+                  {/* Type label + status */}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-[9px] uppercase tracking-[0.3em] font-mono ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                      {internship.type}
+                    </span>
+                    <span className={`inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-widest ${
+                      internship.achievement
+                        ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
+                        : 'text-emerald-400'
+                    }`}>
+                      <span className={`w-1 h-1 rounded-full animate-pulse ${
+                        internship.achievement ? isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]' : 'bg-emerald-400'
+                      }`} />
+                      {internship.status}
+                    </span>
+                  </div>
 
-                <div className="relative z-10 p-4 sm:p-6 lg:p-8">
-                  {/* Top row */}
-                    <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-                    <div>
-                      <div className={`text-[10px] uppercase tracking-[0.35em] font-mono mb-3 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
-                        {internship.type}
-                      </div>
-                      <h3 className={`text-xl sm:text-2xl font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
-                        ? isDark ? 'text-[#4ade80]' : 'text-[#16a34a]'
-                        : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-                      }`}>
-                        {internship.title}
-                      </h3>
-                      <p className={`text-lg font-light mt-1 ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
-                        {internship.company}
-                      </p>
-                    </div>
+                  {/* Title & Company */}
+                  <h3 className={`text-lg font-bold tracking-tight transition-colors duration-500 ${hoveredIndex === index
+                    ? isDark ? 'text-[#4ade80]' : 'text-[#16a34a]'
+                    : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
+                  }`}>
+                    {internship.title}
+                  </h3>
+                  <p className={`text-sm font-light mt-0.5 ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                    {internship.company}
+                  </p>
 
-                    <div className="flex flex-col items-end gap-3">
-                      <span className={`inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest ${
-                        internship.achievement
-                          ? isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'
-                          : 'text-emerald-400'
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                          internship.achievement
-                            ? isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'
-                            : 'bg-emerald-400'
-                        }`} />
-                        {internship.status}
-                      </span>
-                      <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-                        <Calendar className="w-3.5 h-3.5" />
-                        {internship.duration}
-                      </div>
-                    </div>
+                  {/* Duration */}
+                  <div className={`flex items-center gap-1.5 mt-2 text-xs ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                    <Calendar className="w-3 h-3" />
+                    {internship.duration}
                   </div>
 
                   {/* Divider */}
-                  <div className={`h-px mb-4 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
+                  <div className={`h-px my-3 ${isDark ? 'bg-white/8' : 'bg-black/8'}`} />
+
+                  {/* Description */}
+                  <p className={`text-xs font-light leading-relaxed mb-3 line-clamp-2 ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+                    {internship.description}
+                  </p>
 
                   {/* Tech tags */}
-                  <div className="flex flex-wrap gap-3 mb-4">
+                  <div className="flex flex-wrap gap-1.5">
                     {internship.focus.map((tag) => (
                       <span
                         key={tag}
-                        className={`text-xs font-mono px-3 py-1.5 rounded-full border transition-colors duration-300 ${isDark
-                          ? 'border-white/8 text-[#a89f94] group-hover:border-[#4ade80]/20 group-hover:text-[#4ade80]'
-                          : 'border-black/8 text-[#5c5449] group-hover:border-[#16a34a]/20 group-hover:text-[#16a34a]'
+                        className={`text-[10px] font-mono px-2 py-0.5 rounded-full border transition-colors duration-300 ${isDark
+                          ? 'border-white/12 text-[#a89f94] group-hover:border-[#4ade80]/25 group-hover:text-[#4ade80]'
+                          : 'border-black/10 text-[#5c5449] group-hover:border-[#16a34a]/25 group-hover:text-[#16a34a]'
                         }`}>
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  {/* Expand hint */}
-                  <div className={`flex items-center gap-2 text-xs font-mono uppercase tracking-widest transition-opacity duration-300 ${
-                    hoveredIndex === index ? 'opacity-100' : 'opacity-40'
-                  } ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-                    <motion.span
-                      animate={{ rotate: expandedIndex === index ? 45 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="text-base leading-none"
-                    >+</motion.span>
-                    {expandedIndex === index ? 'collapse' : 'expand details'}
-                  </div>
-
-                  {/* Expanded Content */}
-                  <motion.div
-                    initial={false}
-                    animate={{ height: expandedIndex === index ? 'auto' : 0, opacity: expandedIndex === index ? 1 : 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <div className={`mt-6 pt-6 border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}>
-                      <p className={`text-base font-light leading-relaxed mb-6 ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
-                        {internship.description}
-                      </p>
-                      {internship.achievement && (
-                        <span className={`inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
-                          <Award className="w-4 h-4" />
-                          {internship.achievement}
-                        </span>
-                      )}
+                  {/* Achievement badge */}
+                  {internship.achievement && (
+                    <div className={`inline-flex items-center gap-1.5 mt-3 text-xs font-mono uppercase tracking-widest ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+                      <Award className="w-3.5 h-3.5" />
+                      {internship.achievement}
                     </div>
-                  </motion.div>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -209,15 +172,15 @@ export default function Internships() {
 
           {/* Bottom editorial note */}
           <motion.div
-            className="mt-10 flex items-center justify-between"
+            className="mt-6 flex items-center justify-between"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <div className={`flex items-center gap-3 text-sm ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
-              <Briefcase className={`w-4 h-4 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`} />
-              <span className="font-light">Open to new opportunities & collaborations</span>
+            <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+              <span className={`w-4 h-4 ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>✦</span>
+              <span className="font-light">Open to new opportunities</span>
             </div>
             <a
               href="#contact"

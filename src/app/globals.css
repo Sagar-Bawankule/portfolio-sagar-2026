@@ -2,14 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
-
-/* Cabinet Grotesk via font-face for display heading */
-@font-face {
-  font-family: 'Cabinet Grotesk';
-  src: url('https://fonts.cdnfonts.com/css/cabinet-grotesk');
-  font-display: swap;
-}
+/* Fonts are loaded via next/font in layout.tsx — no render-blocking @import needed */
 
 /* ========================================
    CSS VARIABLES — CINEMATIC WARM THEME
@@ -31,8 +24,8 @@
   --accent-amber: #f0b429;
   --accent-warm: #e8985a;
   --accent-copper: #c47a4a;
-  --gradient-orb-opacity: 0.35;
-  --grid-opacity: 0.025;
+  --gradient-orb-opacity: 0.25;
+  --grid-opacity: 0.02;
   --input-bg: rgba(212, 168, 83, 0.05);
   --glow-color: rgba(212, 168, 83, 0.15);
 }
@@ -48,8 +41,8 @@
   --text-muted: #8a8178;
   --border-color: rgba(196, 122, 74, 0.15);
   --border-hover: rgba(196, 122, 74, 0.35);
-  --gradient-orb-opacity: 0.2;
-  --grid-opacity: 0.015;
+  --gradient-orb-opacity: 0.15;
+  --grid-opacity: 0.012;
   --input-bg: rgba(196, 122, 74, 0.04);
   --glow-color: rgba(212, 168, 83, 0.1);
 }
@@ -70,7 +63,7 @@ body {
   min-height: 100vh;
   position: relative;
   background: var(--bg-primary);
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -97,14 +90,15 @@ body {
   bottom: 0;
   z-index: 0;
   background: var(--bg-primary);
-  transition: background 0.5s ease;
+  transition: background 0.4s ease;
+  contain: layout style paint;
 }
 
 /* ========================================
-   CINEMATIC BACKGROUND EFFECTS
+   CINEMATIC BACKGROUND EFFECTS — SIMPLIFIED
    ======================================== */
 
-/* Warm mesh gradient overlay */
+/* Warm mesh gradient overlay — simplified, static */
 .mesh-gradient {
   position: absolute;
   top: 0;
@@ -112,91 +106,53 @@ body {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 20% -10%, rgba(212, 168, 83, 0.15), transparent),
-    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(196, 122, 74, 0.1), transparent),
-    radial-gradient(ellipse 60% 50% at 0% 80%, rgba(240, 180, 41, 0.08), transparent),
-    radial-gradient(ellipse 40% 40% at 100% 100%, rgba(232, 152, 90, 0.08), transparent);
+    radial-gradient(ellipse 70% 50% at 20% -10%, rgba(212, 168, 83, 0.1), transparent),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(196, 122, 74, 0.06), transparent);
   opacity: 1;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 [data-theme="light"] .mesh-gradient {
   background:
-    radial-gradient(ellipse 70% 50% at 20% -10%, rgba(212, 168, 83, 0.08), transparent),
-    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(196, 122, 74, 0.06), transparent),
-    radial-gradient(ellipse 60% 50% at 0% 80%, rgba(240, 180, 41, 0.05), transparent);
+    radial-gradient(ellipse 70% 50% at 20% -10%, rgba(212, 168, 83, 0.06), transparent),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(196, 122, 74, 0.04), transparent);
 }
 
-/* Animated gradient orbs — warm tones */
+/* Single animated gradient orb — reduced from 3, lower blur */
 .gradient-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(120px);
+  filter: blur(60px);
   opacity: var(--gradient-orb-opacity);
-  animation: float-orb 25s ease-in-out infinite;
-  transition: opacity 0.5s ease;
+  animation: float-orb 50s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+  will-change: transform;
 }
 
 .gradient-orb-1 {
-  width: 600px;
-  height: 600px;
-  background: linear-gradient(135deg, rgba(212, 168, 83, 0.35), rgba(196, 122, 74, 0.2));
-  top: -250px;
-  left: -200px;
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, rgba(212, 168, 83, 0.25), rgba(196, 122, 74, 0.15));
+  top: -200px;
+  left: -150px;
   animation-delay: 0s;
 }
 
+/* Orb 2 and 3 — hidden, kept minimal */
 .gradient-orb-2 {
-  width: 500px;
-  height: 500px;
-  background: linear-gradient(135deg, rgba(240, 180, 41, 0.2), rgba(232, 152, 90, 0.15));
-  top: 40%;
-  right: -200px;
-  animation-delay: -8s;
+  display: none;
 }
 
 .gradient-orb-3 {
-  width: 400px;
-  height: 400px;
-  background: linear-gradient(135deg, rgba(196, 122, 74, 0.2), rgba(212, 168, 83, 0.12));
-  bottom: -150px;
-  left: 25%;
-  animation-delay: -15s;
-}
-
-[data-theme="light"] .gradient-orb-1 {
-  background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(196, 122, 74, 0.12));
-}
-
-[data-theme="light"] .gradient-orb-2 {
-  background: linear-gradient(135deg, rgba(240, 180, 41, 0.12), rgba(232, 152, 90, 0.08));
-}
-
-[data-theme="light"] .gradient-orb-3 {
-  background: linear-gradient(135deg, rgba(196, 122, 74, 0.12), rgba(212, 168, 83, 0.08));
+  display: none;
 }
 
 @keyframes float-orb {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  25% {
-    transform: translate(25px, -25px) scale(1.03);
-  }
-
-  50% {
-    transform: translate(-15px, 15px) scale(0.97);
-  }
-
-  75% {
-    transform: translate(15px, 8px) scale(1.01);
-  }
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(15px, -10px); }
 }
 
-/* Grid pattern — subtle warm */
+/* Grid pattern — very subtle */
 .grid-pattern {
   position: absolute;
   top: 0;
@@ -208,112 +164,57 @@ body {
     linear-gradient(90deg, rgba(212, 168, 83, var(--grid-opacity)) 1px, transparent 1px);
   background-size: 80px 80px;
   mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 30%, transparent 100%);
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 [data-theme="light"] .grid-pattern {
   background-image:
-    linear-gradient(rgba(196, 122, 74, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 122, 74, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(196, 122, 74, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 122, 74, 0.025) 1px, transparent 1px);
 }
 
-/* Film grain — cinematic texture */
+/* Film grain — static, no animation */
 .noise-overlay {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  right: -50%;
-  bottom: -50%;
-  width: 200%;
-  height: 200%;
-  opacity: 0.03;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  animation: grain 8s steps(10) infinite;
   pointer-events: none;
 }
 
-@keyframes grain {
-
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-
-  10% {
-    transform: translate(-5%, -10%);
-  }
-
-  20% {
-    transform: translate(-15%, 5%);
-  }
-
-  30% {
-    transform: translate(7%, -25%);
-  }
-
-  40% {
-    transform: translate(-5%, 25%);
-  }
-
-  50% {
-    transform: translate(-15%, 10%);
-  }
-
-  60% {
-    transform: translate(15%, 0%);
-  }
-
-  70% {
-    transform: translate(0%, 15%);
-  }
-
-  80% {
-    transform: translate(3%, 35%);
-  }
-
-  90% {
-    transform: translate(-10%, 10%);
-  }
-}
-
 /* ========================================
-   PREMIUM CARD STYLES — WARM GLASS
+   PREMIUM CARD STYLES — simplified hover
    ======================================== */
 
 .professional-card {
   background: var(--bg-card);
-  backdrop-filter: blur(24px) saturate(1.2);
   border: 1px solid var(--border-color);
-  box-shadow:
-    0 0 0 1px rgba(212, 168, 83, 0.04),
-    0 8px 40px rgba(0, 0, 0, 0.25);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  transition: all 0.35s ease;
 }
 
 .professional-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-hover);
-  box-shadow:
-    0 0 0 1px rgba(212, 168, 83, 0.15),
-    0 24px 60px rgba(0, 0, 0, 0.3),
-    0 0 50px var(--glow-color);
-  transform: translateY(-4px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 [data-theme="light"] .professional-card {
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.06),
-    0 8px 32px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="light"] .professional-card:hover {
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.06),
-    0 24px 48px rgba(196, 122, 74, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(196, 122, 74, 0.08);
 }
 
 /* ========================================
-   ANIMATED GRADIENT CARD BORDER
+   ANIMATED GRADIENT CARD BORDER — simplified
    ======================================== */
 
 @property --border-angle {
@@ -332,26 +233,21 @@ body {
     conic-gradient(
       from var(--border-angle),
       rgba(212, 168, 83, 0.05) 0%,
-      rgba(212, 168, 83, 0.5) 25%,
-      rgba(196, 122, 74, 0.6) 50%,
-      rgba(240, 180, 41, 0.5) 75%,
+      rgba(212, 168, 83, 0.4) 25%,
+      rgba(196, 122, 74, 0.5) 50%,
+      rgba(240, 180, 41, 0.4) 75%,
       rgba(212, 168, 83, 0.05) 100%
     ) border-box;
   border: 1px solid transparent;
-  backdrop-filter: blur(24px) saturate(1.2);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: border-rotate 5s linear infinite paused;
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(212, 168, 83, 0.04);
+  transition: all 0.35s ease;
+  animation: border-rotate 6s linear infinite paused;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
 }
 
 .premium-card-border:hover {
   animation-play-state: running;
-  transform: translateY(-4px);
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.3),
-    0 0 60px rgba(212, 168, 83, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="light"] .premium-card-border {
@@ -360,44 +256,39 @@ body {
     conic-gradient(
       from var(--border-angle),
       rgba(196, 122, 74, 0.05) 0%,
-      rgba(196, 122, 74, 0.4) 25%,
-      rgba(212, 168, 83, 0.5) 50%,
-      rgba(196, 122, 74, 0.4) 75%,
+      rgba(196, 122, 74, 0.35) 25%,
+      rgba(212, 168, 83, 0.4) 50%,
+      rgba(196, 122, 74, 0.35) 75%,
       rgba(196, 122, 74, 0.05) 100%
     ) border-box;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.06),
-    0 8px 32px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="light"] .premium-card-border:hover {
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.06),
-    0 24px 48px rgba(196, 122, 74, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(196, 122, 74, 0.1);
 }
 
 /* ========================================
-   VIGNETTE OVERLAY — CINEMATIC
+   VIGNETTE OVERLAY — lighter
    ======================================== */
 
 .vignette {
   background: radial-gradient(
     ellipse at center,
-    transparent 45%,
-    rgba(8, 6, 4, 0.55) 100%
+    transparent 55%,
+    rgba(8, 6, 4, 0.35) 100%
   );
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 2;
-  transition: opacity 0.5s ease;
 }
 
 [data-theme="light"] .vignette {
   background: radial-gradient(
     ellipse at center,
-    transparent 50%,
-    rgba(20, 16, 12, 0.18) 100%
+    transparent 60%,
+    rgba(20, 16, 12, 0.1) 100%
   );
 }
 
@@ -487,61 +378,23 @@ body {
 }
 
 /* ========================================
-   WARM GLOW EFFECTS
+   WARM GLOW EFFECTS — toned down
    ======================================== */
 
 .glow-gold {
-  box-shadow: 0 0 20px rgba(212, 168, 83, 0.3), 0 0 40px rgba(212, 168, 83, 0.15);
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.2);
 }
 
 .glow-amber {
-  box-shadow: 0 0 20px rgba(240, 180, 41, 0.3), 0 0 40px rgba(240, 180, 41, 0.15);
+  box-shadow: 0 0 15px rgba(240, 180, 41, 0.2);
 }
 
 .btn-glow:hover {
-  box-shadow:
-    0 0 20px rgba(212, 168, 83, 0.4),
-    0 0 40px rgba(196, 122, 74, 0.25),
-    0 0 60px rgba(212, 168, 83, 0.15);
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.25), 0 0 30px rgba(196, 122, 74, 0.12);
 }
 
 [data-theme="light"] .btn-glow:hover {
-  box-shadow:
-    0 0 15px rgba(196, 122, 74, 0.3),
-    0 0 30px rgba(212, 168, 83, 0.15);
-}
-
-/* ========================================
-   THEME TOGGLE — WARM ACCENTS
-   ======================================== */
-
-.theme-toggle {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: var(--input-bg);
-  border: 1px solid var(--border-color);
-}
-
-.theme-toggle:hover {
-  background: rgba(212, 168, 83, 0.1);
-  border-color: rgba(212, 168, 83, 0.25);
-}
-
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
-}
-
-.theme-toggle:hover svg {
-  transform: rotate(15deg);
+  box-shadow: 0 0 10px rgba(196, 122, 74, 0.2);
 }
 
 /* ========================================
@@ -566,87 +419,33 @@ body {
 }
 
 /* ========================================
-   ANIMATIONS — CINEMATIC
+   ANIMATIONS — simplified, no cringe
    ======================================== */
 
 @keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-@keyframes pulse-glow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
-  }
-
-  50% {
-    box-shadow: 0 0 40px rgba(212, 168, 83, 0.6);
-  }
-}
-
-@keyframes gradient-shift {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.animate-gradient-text {
-  background: linear-gradient(-45deg, #d4a853, #c47a4a, #f0b429, #e8985a, #d4a853);
-  background-size: 400% 400%;
-  animation: gradient-shift 6s ease infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  animation: float 5s ease-in-out infinite;
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.08), transparent);
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.06), transparent);
   background-size: 200% 100%;
-  animation: shimmer 2.5s linear infinite;
+  animation: shimmer 3s linear infinite;
 }
 
 /* Warm shine effect for buttons */
 @keyframes shine {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 100%;
-  }
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .btn-shine {
@@ -661,11 +460,11 @@ body {
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
 }
 
 .btn-shine:hover::after {
-  animation: shine 0.7s ease-in-out;
+  animation: shine 0.8s ease-in-out;
 }
 
 /* ========================================
@@ -690,7 +489,7 @@ body {
 
 a,
 button {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
 }
 
 button:focus-visible,
@@ -723,25 +522,23 @@ textarea:focus-visible {
 
 @media (max-width: 768px) {
   .gradient-orb {
-    filter: blur(80px);
-    opacity: calc(var(--gradient-orb-opacity) * 0.5);
-  }
-
-  .professional-card {
-    backdrop-filter: blur(12px);
+    filter: blur(40px);
+    opacity: calc(var(--gradient-orb-opacity) * 0.3);
   }
 
   .section-heading {
-    font-size: 2.25rem;
+    font-size: 2rem;
+  }
+
+  .vignette {
+    display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .gradient-orb,
   .animate-float,
-  .animate-pulse-glow,
-  .animate-gradient-text,
+  .animate-shimmer,
   .noise-overlay {
     animation: none;
   }
@@ -763,101 +560,61 @@ object {
   max-width: 100%;
 }
 
-/* ========================================
-   HOVER GLOW SWEEP — Warm shimmer that sweeps across on hover
-   ======================================== */
-
-@keyframes glow-sweep {
-  0% { left: -100%; opacity: 0; }
-  50% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
+/* Promote section backgrounds to own compositing layer */
+section {
+  contain: layout style;
 }
+
+/* ========================================
+   HOVER SWEEP — toned down significantly
+   ======================================== */
 
 .hover-sweep {
   position: relative;
-  overflow: hidden;
 }
 
-.hover-sweep::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.06), rgba(212, 168, 83, 0.12), rgba(212, 168, 83, 0.06), transparent);
-  pointer-events: none;
-  transition: none;
-}
-
-.hover-sweep:hover::after {
-  animation: glow-sweep 0.8s ease-out;
-}
-
-[data-theme="light"] .hover-sweep::after {
-  background: linear-gradient(90deg, transparent, rgba(196, 122, 74, 0.05), rgba(196, 122, 74, 0.1), rgba(196, 122, 74, 0.05), transparent);
-}
-
-/* ========================================
-   BREATHING RING — Subtle pulse ring for badges
-   ======================================== */
-
-@keyframes breathing-ring {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.4); }
-  50% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
-}
-
-.breathing-ring {
-  animation: breathing-ring 2.5s ease-in-out infinite;
-}
+/* Removed the pseudo-element shimmer sweep — was too flashy/cringe */
 
 /* ========================================
    WARM FOCUS GLOW — For form inputs
    ======================================== */
 
 .warm-focus-glow:focus {
-  box-shadow: 0 2px 20px rgba(212, 168, 83, 0.12), 0 0 0 1px rgba(212, 168, 83, 0.2);
+  box-shadow: 0 2px 15px rgba(212, 168, 83, 0.1), 0 0 0 1px rgba(212, 168, 83, 0.15);
 }
 
 [data-theme="light"] .warm-focus-glow:focus {
-  box-shadow: 0 2px 20px rgba(196, 122, 74, 0.1), 0 0 0 1px rgba(196, 122, 74, 0.15);
+  box-shadow: 0 2px 15px rgba(196, 122, 74, 0.08), 0 0 0 1px rgba(196, 122, 74, 0.12);
 }
 
 /* ========================================
-   SECTION-COLORED HOVER CARD GLOW
+   SECTION-COLORED CARD GLOW — subtle on hover
    ======================================== */
 
-.card-glow-teal { transition: box-shadow 0.5s ease; }
-.card-glow-teal:hover { box-shadow: 0 0 40px rgba(45, 212, 191, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+.card-glow-teal { transition: box-shadow 0.35s ease; }
+.card-glow-teal:hover { box-shadow: 0 0 25px rgba(45, 212, 191, 0.06), 0 4px 20px rgba(0,0,0,0.1); }
 
-.card-glow-emerald { transition: box-shadow 0.5s ease; }
-.card-glow-emerald:hover { box-shadow: 0 0 40px rgba(74, 222, 128, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+.card-glow-emerald { transition: box-shadow 0.35s ease; }
+.card-glow-emerald:hover { box-shadow: 0 0 25px rgba(74, 222, 128, 0.06), 0 4px 20px rgba(0,0,0,0.1); }
 
-.card-glow-indigo { transition: box-shadow 0.5s ease; }
-.card-glow-indigo:hover { box-shadow: 0 0 40px rgba(129, 140, 248, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+.card-glow-indigo { transition: box-shadow 0.35s ease; }
+.card-glow-indigo:hover { box-shadow: 0 0 25px rgba(129, 140, 248, 0.06), 0 4px 20px rgba(0,0,0,0.1); }
 
-.card-glow-amber { transition: box-shadow 0.5s ease; }
-.card-glow-amber:hover { box-shadow: 0 0 40px rgba(251, 191, 36, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+.card-glow-amber { transition: box-shadow 0.35s ease; }
+.card-glow-amber:hover { box-shadow: 0 0 25px rgba(251, 191, 36, 0.06), 0 4px 20px rgba(0,0,0,0.1); }
 
-.card-glow-rose { transition: box-shadow 0.5s ease; }
-.card-glow-rose:hover { box-shadow: 0 0 40px rgba(251, 113, 133, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+.card-glow-rose { transition: box-shadow 0.35s ease; }
+.card-glow-rose:hover { box-shadow: 0 0 25px rgba(251, 113, 133, 0.06), 0 4px 20px rgba(0,0,0,0.1); }
 
-.card-glow-violet { transition: box-shadow 0.5s ease; }
-.card-glow-violet:hover { box-shadow: 0 0 40px rgba(192, 132, 252, 0.08), 0 8px 30px rgba(0,0,0,0.15); }
+.card-glow-violet { transition: box-shadow 0.35s ease; }
+.card-glow-violet:hover { box-shadow: 0 0 25px rgba(192, 132, 252, 0.06), 0 4px 20px rgba(0,0,0,0.1); }
 
-[data-theme="light"] .card-glow-teal:hover { box-shadow: 0 0 30px rgba(13, 148, 136, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
-[data-theme="light"] .card-glow-emerald:hover { box-shadow: 0 0 30px rgba(22, 163, 74, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
-[data-theme="light"] .card-glow-indigo:hover { box-shadow: 0 0 30px rgba(79, 70, 229, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
-[data-theme="light"] .card-glow-amber:hover { box-shadow: 0 0 30px rgba(217, 119, 6, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
-[data-theme="light"] .card-glow-rose:hover { box-shadow: 0 0 30px rgba(225, 29, 72, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
-[data-theme="light"] .card-glow-violet:hover { box-shadow: 0 0 30px rgba(124, 58, 237, 0.06), 0 4px 20px rgba(0,0,0,0.04); }
-
-/* Nav link glow underline */
-@keyframes nav-glow-sweep {
-  0% { width: 0; left: 50%; opacity: 0; }
-  50% { opacity: 1; }
-  100% { width: 60%; left: 20%; opacity: 0.8; }
-}
+[data-theme="light"] .card-glow-teal:hover { box-shadow: 0 0 20px rgba(13, 148, 136, 0.04), 0 4px 16px rgba(0,0,0,0.03); }
+[data-theme="light"] .card-glow-emerald:hover { box-shadow: 0 0 20px rgba(22, 163, 74, 0.04), 0 4px 16px rgba(0,0,0,0.03); }
+[data-theme="light"] .card-glow-indigo:hover { box-shadow: 0 0 20px rgba(79, 70, 229, 0.04), 0 4px 16px rgba(0,0,0,0.03); }
+[data-theme="light"] .card-glow-amber:hover { box-shadow: 0 0 20px rgba(217, 119, 6, 0.04), 0 4px 16px rgba(0,0,0,0.03); }
+[data-theme="light"] .card-glow-rose:hover { box-shadow: 0 0 20px rgba(225, 29, 72, 0.04), 0 4px 16px rgba(0,0,0,0.03); }
+[data-theme="light"] .card-glow-violet:hover { box-shadow: 0 0 20px rgba(124, 58, 237, 0.04), 0 4px 16px rgba(0,0,0,0.03); }
 
 /* ========================================
    CUSTOM SELECTION — WARM

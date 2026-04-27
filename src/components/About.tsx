@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState, useRef } from 'react'
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useTheme } from '@/context/ThemeContext'
 import { ArrowRight, Sparkles } from 'lucide-react'
@@ -40,7 +40,6 @@ const fadeUpVariants = {
 export default function About() {
   const [aboutData, setAboutData] = useState<AboutData>(defaultAboutData)
   const [loading, setLoading] = useState(true)
-  const [hoveredTech, setHoveredTech] = useState<number | null>(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -86,22 +85,14 @@ export default function About() {
 
   return (
     <section
-      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden rounded-t-[2rem] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-8 sm:py-10 lg:py-14 overflow-hidden rounded-t-[2rem] shadow-[0_-20px_80px_rgba(0,0,0,0.6)] ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="about"
     >
-      {/* Subtle background */}
+      {/* Subtle background — single ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-0 right-0 w-[400px] h-[400px] rounded-full ${isDark ? 'bg-[#d4a853]/8' : 'bg-[#d4a853]/5'}`}
-          style={{ filter: 'blur(120px)' }}
-        />
-        <div
-          className={`absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#c47a4a]/6' : 'bg-[#c47a4a]/4'}`}
-          style={{ filter: 'blur(100px)' }}
-        />
-        <div
-          className={`absolute top-1/2 left-1/3 w-[200px] h-[200px] rounded-full ${isDark ? 'bg-[#f0b429]/4' : 'bg-[#f0b429]/3'}`}
-          style={{ filter: 'blur(90px)' }}
+          className={`absolute top-0 right-0 w-[300px] h-[300px] rounded-full ${isDark ? 'bg-[#d4a853]/5' : 'bg-[#d4a853]/3'}`}
+          style={{ filter: 'blur(60px)' }}
         />
       </div>
 
@@ -109,7 +100,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-8 sm:mb-10 lg:mb-14">
+          <div className="mb-5 sm:mb-6 lg:mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -120,25 +111,20 @@ export default function About() {
               <span className="section-label">01 &mdash; get to know</span>
             </motion.div>
 
-            {/* Big Serif Heading — same style as Hero */}
-            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
-              {aboutHeading.split('').map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </div>
+            {/* Section Heading — clean fade */}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`font-serif font-black text-[clamp(1.8rem,5vw,4.5rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+            >
+              {aboutHeading}
+            </motion.h2>
           </div>
 
           {/* Main Content Grid — Photo + Text */}
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
 
             {/* Left Column — Photo (editorial framing) */}
             <motion.div
@@ -154,7 +140,7 @@ export default function About() {
                   {/* Gradient border top */}
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#d4a853] via-[#c47a4a] to-[#e8985a] z-10" />
 
-                  <div className="relative aspect-[5/6] w-full">
+                  <div className="relative aspect-[4/5] w-full">
                     <Image
                       src={aboutData.profileImage || "/profilephoto.webp"}
                       alt={`${aboutData.name} — ${aboutData.title}`}
@@ -207,7 +193,7 @@ export default function About() {
 
             {/* Right Column — Content (editorial typography) */}
             <motion.div
-              className="lg:col-span-8 space-y-8"
+              className="lg:col-span-8 space-y-5"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -221,7 +207,7 @@ export default function About() {
                 transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
                 <p
-                  className={`text-base sm:text-lg leading-[1.7] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}
+                  className={`text-sm sm:text-base leading-[1.6] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}
                 >
                   {aboutData.introduction}
                 </p>
@@ -229,13 +215,13 @@ export default function About() {
 
               {/* Editorial Quote — full width, big italic serif */}
               <motion.div
-                className={`relative py-5 border-y ${isDark ? 'border-[#d4a853]/10' : 'border-[#c47a4a]/10'}`}
+                className={`relative py-3 border-y ${isDark ? 'border-[#d4a853]/10' : 'border-[#c47a4a]/10'}`}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.7, duration: 1 }}
               >
-                <p className={`font-serif italic text-xl sm:text-2xl leading-[1.3] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
+                <p className={`font-serif italic text-lg sm:text-xl leading-[1.3] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
                   &ldquo;{aboutData.quote}&rdquo;
                 </p>
                 <motion.div
@@ -248,7 +234,7 @@ export default function About() {
               {/* Core Technologies — editorial minimal style */}
               <div>
                 <motion.div
-                  className="flex items-center gap-4 mb-5"
+                  className="flex items-center gap-4 mb-3"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
@@ -268,26 +254,9 @@ export default function About() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 1 + index * 0.05, duration: 0.6 }}
-                      onMouseEnter={() => setHoveredTech(index)}
-                      onMouseLeave={() => setHoveredTech(null)}
-                      className={`relative text-lg font-medium cursor-default transition-all duration-500 pb-1 ${hoveredTech === index
-                        ? isDark ? 'text-[#d4a853] scale-105' : 'text-[#c47a4a] scale-105'
-                        : isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'
-                        }`}
-                      whileHover={{ y: -3 }}
+                      className={`relative text-base font-medium cursor-default transition-colors duration-300 pb-1 ${isDark ? 'text-[#f5f0eb] hover:text-[#d4a853]' : 'text-[#1a1612] hover:text-[#c47a4a]'}`}
                     >
-                      <span className={`absolute -inset-x-3 -inset-y-1 rounded-full transition-all duration-500 -z-10 ${hoveredTech === index
-                        ? isDark ? 'bg-[#d4a853]/8 shadow-[0_0_12px_rgba(212,168,83,0.15)]' : 'bg-[#c47a4a]/8 shadow-[0_0_12px_rgba(196,122,74,0.1)]'
-                        : 'bg-transparent'
-                      }`} />
                       {tech}
-                      {/* Underline on hover */}
-                      <motion.span
-                        className={`absolute bottom-0 left-0 h-px ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`}
-                        initial={{ width: 0 }}
-                        animate={{ width: hoveredTech === index ? '100%' : 0 }}
-                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                      />
                       {index < aboutData.coreTechnologies.length - 1 && (
                         <span className={`ml-4 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>·</span>
                       )}
@@ -298,7 +267,7 @@ export default function About() {
 
               {/* Bottom CTA line — editorial */}
               <motion.div
-                className={`flex items-center justify-between pt-5 border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}
+                className={`flex items-center justify-between pt-3 border-t ${isDark ? 'border-white/10' : 'border-black/8'}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

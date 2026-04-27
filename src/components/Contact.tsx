@@ -69,7 +69,7 @@ export default function Contact() {
 
   return (
     <section
-      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
+      className={`relative py-8 sm:py-10 lg:py-14 overflow-hidden ${isDark ? 'bg-[#080604]' : 'bg-[#faf8f5]'}`}
       id="contact"
     >
       {/* Section top divider */}
@@ -79,15 +79,15 @@ export default function Contact() {
       <div className="absolute inset-0 pointer-events-none">
         <div
           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full ${isDark ? 'bg-[#c084fc]/8' : 'bg-[#7c3aed]/5'}`}
-          style={{ filter: 'blur(120px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
         <div
           className={`absolute top-0 right-0 w-[220px] h-[220px] rounded-full ${isDark ? 'bg-[#a78bfa]/5' : 'bg-[#6d28d9]/4'}`}
-          style={{ filter: 'blur(100px)' }}
+          style={{ filter: 'blur(60px)' }}
         />
         <div
           className={`absolute bottom-0 left-0 w-[200px] h-[200px] rounded-full ${isDark ? 'bg-[#818cf8]/4' : 'bg-[#4f46e5]/3'}`}
-          style={{ filter: 'blur(90px)' }}
+          style={{ filter: 'blur(60px)' }}
         />
       </div>
 
@@ -95,7 +95,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto">
 
           {/* Editorial Section Header */}
-          <div className="mb-8 sm:mb-10 lg:mb-14">
+          <div className="mb-5 sm:mb-6 lg:mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -106,52 +106,47 @@ export default function Contact() {
               <span className="section-label">07 &mdash; get in touch</span>
             </motion.div>
 
-            <div className="flex flex-nowrap" style={{ perspective: '1200px' }}>
-              {sectionHeading.split('').map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 30, rotateX: -20 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(2.2rem,8vw,7rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`font-serif font-black text-[clamp(1.8rem,5vw,4.5rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+            >
+              {sectionHeading}
+            </motion.h2>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <div className="grid lg:grid-cols-12 gap-6 items-start">
 
             {/* Left Column — Contact Info & Socials */}
             <motion.div
-              className="lg:col-span-12 xl:col-span-5 space-y-10"
+              className="lg:col-span-12 xl:col-span-5 space-y-6"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.5 }}
             >
-              <div className="space-y-10">
-                <p className={`text-xl sm:text-2xl leading-[1.4] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
+              <div className="space-y-6">
+                <p className={`text-base sm:text-lg leading-[1.4] font-light ${isDark ? 'text-[#a89f94]' : 'text-[#5c5449]'}`}>
                   Have a vision for a project? Need an AI specialist? Or just want to talk tech? <span className={`font-serif italic ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>My inbox is always open.</span>
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-8 pt-6 border-t border-current/5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-4 border-t border-current/8">
                   {contactInfo.map((info, idx) => (
                     <div key={idx} className="group cursor-default">
-                      <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-4 transition-colors ${isDark ? 'text-[#6b6259] group-hover:text-[#c084fc]' : 'text-[#8a8178] group-hover:text-[#7c3aed]'}`}>
+                      <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-2 transition-colors ${isDark ? 'text-[#6b6259] group-hover:text-[#c084fc]' : 'text-[#8a8178] group-hover:text-[#7c3aed]'}`}>
                         {info.title}
                       </p>
                       {info.href ? (
                         <a
                           href={info.href}
-                          className={`text-xl sm:text-2xl font-medium transition-colors hover:text-[#c084fc] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+                          className={`text-base sm:text-lg font-medium transition-colors hover:text-[#c084fc] ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
                         >
                           {info.value}
                         </a>
                       ) : (
-                        <span className={`text-xl sm:text-2xl font-medium ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
+                        <span className={`text-base sm:text-lg font-medium ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}>
                           {info.value}
                         </span>
                       )}
@@ -161,23 +156,22 @@ export default function Contact() {
               </div>
 
               {/* Social Links Editorial Style */}
-              <div className="pt-8 border-t border-current/5">
-                <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-5 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+              <div className="pt-4 border-t border-current/8">
+                <p className={`text-[10px] uppercase tracking-[0.4em] font-mono mb-3 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
                   Digital Spaces
                 </p>
                 <div className="flex flex-wrap gap-x-12 gap-y-6">
                   {socials.map((social) => (
-                    <motion.a
+                    <a
                       key={social.name}
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`text-xl font-medium relative group transition-colors ${isDark ? 'text-[#a89f94] hover:text-[#c084fc]' : 'text-[#5c5449] hover:text-[#7c3aed]'}`}
-                      whileHover={{ y: -3, scale: 1.05 }}
+                      className={`text-xl font-medium relative group transition-colors duration-300 ${isDark ? 'text-[#a89f94] hover:text-[#c084fc]' : 'text-[#5c5449] hover:text-[#7c3aed]'}`}
                     >
                       {social.name}
-                      <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-500 group-hover:w-full ${isDark ? 'bg-[#c084fc]' : 'bg-[#7c3aed]'}`} />
-                    </motion.a>
+                      <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-400 group-hover:w-full ${isDark ? 'bg-[#c084fc]' : 'bg-[#7c3aed]'}`} />
+                    </a>
                   ))}
                 </div>
               </div>
@@ -191,8 +185,8 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.7 }}
             >
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="relative group">
                     <input
                       type="text"
@@ -203,8 +197,8 @@ export default function Contact() {
                       required
                       placeholder="Your Name"
                       className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
-                          ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
-                          : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
+                          ? 'border-[#a89f94]/30 focus:border-[#c084fc] text-[#f5f0eb]'
+                          : 'border-[#5c5449]/25 focus:border-[#7c3aed] text-[#1a1612]'
                         }`}
                     />
                     <label htmlFor="name" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.name
@@ -225,8 +219,8 @@ export default function Contact() {
                       required
                       placeholder="Email Address"
                       className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
-                          ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
-                          : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
+                          ? 'border-[#a89f94]/30 focus:border-[#c084fc] text-[#f5f0eb]'
+                          : 'border-[#5c5449]/25 focus:border-[#7c3aed] text-[#1a1612]'
                         }`}
                     />
                     <label htmlFor="email" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.email
@@ -248,8 +242,8 @@ export default function Contact() {
                     required
                     placeholder="Subject"
                     className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
-                        ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
-                        : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
+                        ? 'border-[#a89f94]/30 focus:border-[#c084fc] text-[#f5f0eb]'
+                        : 'border-[#5c5449]/25 focus:border-[#7c3aed] text-[#1a1612]'
                       }`}
                   />
                   <label htmlFor="subject" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.subject
@@ -267,11 +261,11 @@ export default function Contact() {
                     value={formData.message}
                     onChange={handleInputChange}
                     required
-                    rows={4}
+                    rows={3}
                     placeholder="Your Message"
                     className={`w-full bg-transparent border-b py-4 focus:outline-none transition-all resize-none placeholder-transparent focus:placeholder-opacity-0 warm-focus-glow ${isDark
-                        ? 'border-[#a89f94]/20 focus:border-[#c084fc] text-[#f5f0eb]'
-                        : 'border-[#5c5449]/20 focus:border-[#7c3aed] text-[#1a1612]'
+                        ? 'border-[#a89f94]/30 focus:border-[#c084fc] text-[#f5f0eb]'
+                        : 'border-[#5c5449]/25 focus:border-[#7c3aed] text-[#1a1612]'
                       }`}
                   />
                   <label htmlFor="message" className={`absolute left-0 top-4 transition-all duration-300 pointer-events-none origin-left ${formData.message
@@ -285,20 +279,14 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`group relative flex items-center gap-4 text-2xl font-medium pt-4 outline-none transition-all duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#c084fc]' : 'text-[#1a1612] hover:text-[#7c3aed]'}`}
-                  whileHover={{ x: 10 }}
+                  className={`group relative flex items-center gap-3 text-lg font-medium pt-2 outline-none transition-colors duration-300 ${isDark ? 'text-[#f5f0eb] hover:text-[#c084fc]' : 'text-[#1a1612] hover:text-[#7c3aed]'}`}
                 >
                   <span className="relative">
                     {isSubmitting ? 'Sending...' : 'Send Message'}
-                    <span className={`absolute bottom-0 left-0 w-full h-[1.5px] transition-all duration-500 scale-x-100 ${isDark ? 'bg-[#c084fc]' : 'bg-[#7c3aed]'}`} />
+                    <span className={`absolute bottom-0 left-0 w-full h-[1.5px] ${isDark ? 'bg-[#c084fc]' : 'bg-[#7c3aed]'}`} />
                   </span>
                   {!isSubmitting && (
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                    >
-                      <ArrowUpRight className={`w-6 h-6 ${isDark ? 'text-[#c084fc]' : 'text-[#7c3aed]'}`} />
-                    </motion.div>
+                    <ArrowUpRight className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${isDark ? 'text-[#c084fc]' : 'text-[#7c3aed]'}`} />
                   )}
                 </motion.button>
 

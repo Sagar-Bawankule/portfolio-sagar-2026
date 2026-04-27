@@ -57,7 +57,7 @@ const Certifications = () => {
 
   return (
     <section
-      className={`relative py-12 sm:py-16 lg:py-20 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
+      className={`relative py-8 sm:py-10 lg:py-14 overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}
       id="certifications"
     >
       {/* Section top divider */}
@@ -67,11 +67,11 @@ const Certifications = () => {
       <div className="absolute inset-0 pointer-events-none">
         <div
           className={`absolute top-1/3 right-1/4 w-[380px] h-[380px] rounded-full ${isDark ? 'bg-[#fb7185]/7' : 'bg-[#f43f5e]/5'}`}
-          style={{ filter: 'blur(130px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
         <div
           className={`absolute bottom-0 left-0 w-[220px] h-[220px] rounded-full ${isDark ? 'bg-[#f472b6]/5' : 'bg-[#ec4899]/3'}`}
-          style={{ filter: 'blur(100px)' }}
+          style={{ filter: 'blur(80px)' }}
         />
       </div>
 
@@ -79,7 +79,7 @@ const Certifications = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
-          <div className="mb-8 sm:mb-10 lg:mb-14">
+          <div className="mb-5 sm:mb-6 lg:mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -90,24 +90,19 @@ const Certifications = () => {
               <span className="section-label">06 &mdash; achievements</span>
             </motion.div>
 
-            <div className="flex flex-nowrap overflow-hidden" style={{ perspective: '1200px' }}>
-              {"CERTIFICATES".split('').map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 40, rotateX: -20 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.03 + i * 0.045, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-serif font-black text-[clamp(1.6rem,5vw,6rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
-                >
-                  {letter === ' ' ? '\u00A0' : letter}
-                </motion.span>
-              ))}
-            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`font-serif font-black text-[clamp(1.6rem,4.5vw,4.5rem)] leading-[0.85] tracking-[-0.03em] select-none ${isDark ? 'text-[#f5f0eb]' : 'text-[#1a1612]'}`}
+            >
+              CERTIFICATES
+            </motion.h2>
           </div>
 
           {/* Stacked accordion list */}
-          <div className={`border-t ${isDark ? 'border-white/8' : 'border-black/8'}`}>
+          <div className={`border-t ${isDark ? 'border-white/12' : 'border-black/10'}`}>
             {certifications.map((cert, index) => {
               const isOpen = openIndex === index
               const isHovered = hoveredIndex === index
@@ -122,7 +117,7 @@ const Certifications = () => {
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={`border-b transition-all duration-300 hover-sweep card-glow-rose ${
-                    isDark ? 'border-white/8' : 'border-black/8'
+                    isDark ? 'border-white/12' : 'border-black/10'
                   }`}
                 >
                   {/* Row trigger */}
@@ -130,9 +125,9 @@ const Certifications = () => {
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="w-full text-left"
                   >
-                    <div className={`flex items-center gap-6 py-7 px-2 sm:px-4 transition-all duration-300 ${
+                    <div className={`flex items-center gap-4 py-4 px-2 sm:px-3 transition-all duration-300 ${
                       isHovered || isOpen
-                        ? isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'
+                        ? isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]'
                         : ''
                     }`}>
                       {/* Index */}
@@ -148,7 +143,7 @@ const Certifications = () => {
                       <span className={`hidden sm:inline-flex text-[9px] font-mono uppercase tracking-[0.25em] px-2.5 py-1 rounded-full border shrink-0 transition-all duration-300 ${
                         isOpen
                           ? isDark ? 'border-[#fb7185]/30 bg-[#fb7185]/8 text-[#fb7185]' : 'border-[#e11d48]/30 bg-[#e11d48]/8 text-[#e11d48]'
-                          : isDark ? 'border-white/8 text-[#6b6259]' : 'border-black/8 text-[#8a8178]'
+                          : isDark ? 'border-white/12 text-[#6b6259]' : 'border-black/10 text-[#8a8178]'
                       }`}>
                         {cert.issuer}
                       </span>
@@ -177,7 +172,7 @@ const Certifications = () => {
                         className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${
                           isOpen
                             ? isDark ? 'border-[#fb7185]/40 bg-[#fb7185]/10 text-[#fb7185]' : 'border-[#e11d48]/40 bg-[#e11d48]/10 text-[#e11d48]'
-                            : isDark ? 'border-white/10 text-[#6b6259]' : 'border-black/10 text-[#8a8178]'
+                            : isDark ? 'border-white/15 text-[#6b6259]' : 'border-black/12 text-[#8a8178]'
                         }`}
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -196,11 +191,11 @@ const Certifications = () => {
                         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className={`mx-2 sm:mx-4 mb-7 pl-14 sm:pl-[calc(2rem+2.5rem+1.5rem)] flex flex-col sm:flex-row gap-6 sm:gap-12`}>
+                        <div className={`mx-2 sm:mx-3 mb-4 pl-12 sm:pl-[calc(2rem+2.5rem+1rem)] flex flex-col sm:flex-row gap-4 sm:gap-8`}>
                           {/* Description */}
                           <div className="flex-1">
                             {cert.description && (
-                              <p className={`text-sm leading-relaxed mb-5 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
+                              <p className={`text-xs leading-relaxed mb-3 ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
                                 {cert.description}
                               </p>
                             )}
@@ -214,8 +209,8 @@ const Certifications = () => {
                                   transition={{ delay: si * 0.04, duration: 0.3 }}
                                   className={`text-xs font-mono px-3 py-1 rounded-full border transition-colors duration-300 ${
                                     isDark
-                                      ? 'border-white/8 text-[#6b6259] hover:border-[#fb7185]/30 hover:text-[#fb7185]'
-                                      : 'border-black/8 text-[#8a8178] hover:border-[#e11d48]/30 hover:text-[#e11d48]'
+                                      ? 'border-white/12 text-[#6b6259] hover:border-[#fb7185]/30 hover:text-[#fb7185]'
+                                      : 'border-black/10 text-[#8a8178] hover:border-[#e11d48]/30 hover:text-[#e11d48]'
                                   }`}
                                 >
                                   {skill}
@@ -255,21 +250,21 @@ const Certifications = () => {
 
           {/* Footer stat row */}
           <motion.div
-            className="mt-10 flex flex-wrap items-center justify-between gap-6"
+            className="mt-6 flex flex-wrap items-center justify-between gap-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 1 }}
           >
             <div className="flex items-center gap-3">
-              <span className={`text-5xl font-black font-serif ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
+              <span className={`text-3xl font-black font-serif ${isDark ? 'text-[#d4a853]' : 'text-[#c47a4a]'}`}>
                 {certifications.length}
               </span>
               <span className={`text-sm font-light ${isDark ? 'text-[#6b6259]' : 'text-[#8a8178]'}`}>
                 certificates<br />earned
               </span>
             </div>
-            <div className={`h-px flex-1 mx-4 ${isDark ? 'bg-white/6' : 'bg-black/6'}`} />
+            <div className={`h-px flex-1 mx-4 ${isDark ? 'bg-white/10' : 'bg-black/8'}`} />
             <span className={`text-[10px] uppercase tracking-[0.3em] font-mono ${isDark ? 'text-[#3a3228]' : 'text-[#d4c5b0]'}`}>
               Continuously Learning
             </span>

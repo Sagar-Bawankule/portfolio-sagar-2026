@@ -57,7 +57,7 @@ const Footer = () => {
   return (
     <footer className={`relative overflow-hidden ${isDark ? 'bg-[#0f0d0a]' : 'bg-[#f5f2ed]'}`}>
       {/* Top divider */}
-      <div className={`h-px mx-6 sm:mx-12 lg:mx-20 ${isDark ? 'bg-white/5' : 'bg-black/5'}`} />
+      <div className={`h-px mx-6 sm:mx-12 lg:mx-20 ${isDark ? 'bg-white/10' : 'bg-black/8'}`} />
 
       <div className="container mx-auto px-6 sm:px-12 lg:px-20 pt-20 pb-12">
 
@@ -104,7 +104,7 @@ const Footer = () => {
         </motion.div>
 
         {/* Main grid — nav links + info + socials */}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-16 py-12 border-y ${isDark ? 'border-white/5' : 'border-black/5'}`}>
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-16 py-12 border-y ${isDark ? 'border-white/10' : 'border-black/8'}`}>
 
           {/* Nav Links */}
           <motion.div
@@ -123,7 +123,7 @@ const Footer = () => {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
-                  className={`relative group text-base font-medium transition-all duration-300 pb-0.5 hover:scale-105 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
+                  className={`relative group text-base font-medium transition-colors duration-300 pb-0.5 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
                 >
                   {link.name}
                   <span className={`absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-400 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />
@@ -180,10 +180,9 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group flex items-center gap-3 text-base font-medium transition-all duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
-                  whileHover={{ x: 5, scale: 1.02 }}
+                  className={`group flex items-center gap-3 text-base font-medium transition-colors duration-300 ${isDark ? 'text-[#6b6259] hover:text-[#f5f0eb]' : 'text-[#8a8178] hover:text-[#1a1612]'}`}
                 >
-                  <social.icon className={`w-4 h-4 flex-shrink-0 transition-all duration-300 group-hover:scale-125 ${isDark ? 'group-hover:text-[#d4a853] group-hover:drop-shadow-[0_0_6px_rgba(212,168,83,0.5)]' : 'group-hover:text-[#c47a4a]'}`} />
+                  <social.icon className={`w-4 h-4 flex-shrink-0 transition-colors duration-300 ${isDark ? 'group-hover:text-[#d4a853]' : 'group-hover:text-[#c47a4a]'}`} />
                   <span className="relative pb-0.5">
                     {social.name}
                     <span className={`absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-400 ${isDark ? 'bg-[#d4a853]' : 'bg-[#c47a4a]'}`} />

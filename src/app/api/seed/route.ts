@@ -28,7 +28,7 @@ export async function GET() {
             {
                 title: "AI Interview Question Generator & Evaluator",
                 description: "A full-stack web app built using Flask and Hugging Face models to help users prepare for technical interviews with AI-generated questions and intelligent answer evaluation.",
-                technologies: ["Python", "Flask", "Hugging Face", "javascript", "html", "css", "Sentence Transformers", "Bootstrap"],
+                technologies: ["Python", "Flask", "Hugging Face", "JavaScript", "HTML", "CSS", "Sentence Transformers", "Bootstrap"],
                 githubUrl: "https://github.com/Sagar-Bawankule/AI-Interview-Question-Generator",
                 liveUrl: "https://ai-interview-question-generator-vl2w.onrender.com",
                 image: "/AIQuestion.jpg",
@@ -36,6 +36,28 @@ export async function GET() {
                 icon: "Brain",
                 color: "from-purple-500 to-pink-500",
                 order: 1
+            },
+            {
+                title: "EcoTrack – Carbon Footprint Tracker",
+                description: "A responsive, minimalist web application to track, calculate, and reduce your personal carbon footprint (CO₂e). Features a carbon dial dashboard, category breakdowns for Energy/Transport/Food/Shopping, trend charts, AI recommendations, and budget alerts.",
+                technologies: ["React", "Node.js", "MongoDB", "Tailwind CSS", "Vite", "Framer Motion", "Recharts", "JWT", "Express.js"],
+                githubUrl: "https://github.com/Sagar-Bawankule/carbon-project",
+                liveUrl: "https://carbon-project-client.vercel.app/",
+                featured: true,
+                icon: "Leaf",
+                color: "from-green-500 to-emerald-500",
+                order: 2
+            },
+            {
+                title: "MeetMatch – Event Management System",
+                description: "A centralized event management platform for educational institutions to streamline the entire lifecycle of college events — from proposal and approval to student registration. Features Student, HOD, and Admin portals with role-based access control.",
+                technologies: ["Next.js", "React", "Tailwind CSS", "Radix UI", "MongoDB", "Mongoose", "NextAuth.js", "bcryptjs"],
+                githubUrl: "https://github.com/Sagar-Bawankule/event-management",
+                liveUrl: "https://event-management-51bt.onrender.com/",
+                featured: true,
+                icon: "Monitor",
+                color: "from-indigo-500 to-violet-500",
+                order: 3
             },
             {
                 title: "FarmCareAI",
@@ -48,7 +70,7 @@ export async function GET() {
                 icon: "Leaf",
                 color: "from-green-500 to-emerald-500",
                 status: "In Progress",
-                order: 2
+                order: 4
             },
             {
                 title: "Electric Vehicle Adoption Forecasting System",
@@ -60,7 +82,7 @@ export async function GET() {
                 featured: true,
                 icon: "Zap",
                 color: "from-blue-500 to-cyan-500",
-                order: 3
+                order: 5
             },
             {
                 title: "Sagar Bawankule – Portfolio Website",
@@ -72,7 +94,7 @@ export async function GET() {
                 featured: false,
                 icon: "Monitor",
                 color: "from-indigo-500 to-purple-500",
-                order: 4
+                order: 6
             }
         ]
 
